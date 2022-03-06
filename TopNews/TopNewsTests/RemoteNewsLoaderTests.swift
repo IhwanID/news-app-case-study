@@ -38,13 +38,10 @@ class RemoteNewsLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteNewsLoader.Result]()
-        sut.load { capturedErrors.append($0) }
-        
-        let clientError = NSError(domain: "Test", code: 0)
-        client.complete(with: clientError)
-        
-        XCTAssertEqual(capturedErrors, [.failure(.connectivity)])
+        expect(sut, toCompleteWith: .failure(.connectivity), when: {
+            let clientError = NSError(domain: "Test", code: 0)
+            client.complete(with: clientError)
+        })
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
@@ -53,15 +50,12 @@ class RemoteNewsLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            var capturedErrors = [RemoteNewsLoader.Result]()
-            sut.load { capturedErrors.append($0) }
-            
-            let json = ["items": []]
-            let data =  try! JSONSerialization.data(withJSONObject: json)
-            
-            client.complete(withStatusCode: code, data: data, at: index)
-            
-            XCTAssertEqual(capturedErrors, [.failure(.invalidData)])
+            expect(sut, toCompleteWith: .failure(.invalidData), when: {
+                let json = ["items": []]
+                let data =  try! JSONSerialization.data(withJSONObject: json)
+                
+                client.complete(withStatusCode: code, data: data, at: index)
+            })
         }
     }
     
