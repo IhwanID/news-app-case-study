@@ -4,7 +4,8 @@ name: CI
 # Triggers the workflow on specific pull request events.
 on:
   pull_request:
-    types: [master, opened, synchronize]
+    types: [opened, synchronize]
+    branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
