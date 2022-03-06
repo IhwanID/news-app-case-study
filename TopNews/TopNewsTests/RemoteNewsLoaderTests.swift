@@ -16,6 +16,10 @@ class RemoteNewsLoader {
         self.url = url
         self.client = client
     }
+    
+    func load() {
+        client.get(from: url)
+    }
 }
 
 protocol HTTPClient {
@@ -28,6 +32,15 @@ class RemoteNewsLoaderTests: XCTestCase {
         let (_, client) = makeSUT()
         
         XCTAssertNil(client.requestedURL)
+    }
+    
+    func test_load_requestDataFromURL() {
+        let url = URL(string: "https://a-given-url.com")!
+        let (sut, client) = makeSUT(url: url)
+        
+        sut.load()
+        
+        XCTAssertEqual(client.requestedURL, url)
     }
     
     private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (sut: RemoteNewsLoader, client: HTTPClientSpy) {
