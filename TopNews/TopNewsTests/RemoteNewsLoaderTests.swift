@@ -89,25 +89,33 @@ class RemoteNewsLoaderTests: XCTestCase {
     }
     
     func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-            let url = URL(string: "http://any-url.com")!
-            let client = HTTPClientSpy()
-            var sut: RemoteNewsLoader? = RemoteNewsLoader(url: url, client: client)
-
-            var capturedResults = [RemoteNewsLoader.Result]()
-            sut?.load { capturedResults.append($0) }
-
-            sut = nil
-            client.complete(withStatusCode: 200, data: makeItemsJSON([]))
-
-            XCTAssertTrue(capturedResults.isEmpty)
-        }
+        let url = URL(string: "http://any-url.com")!
+        let client = HTTPClientSpy()
+        var sut: RemoteNewsLoader? = RemoteNewsLoader(url: url, client: client)
+        
+        var capturedResults = [RemoteNewsLoader.Result]()
+        sut?.load { capturedResults.append($0) }
+        
+        sut = nil
+        client.complete(withStatusCode: 200, data: makeItemsJSON([]))
+        
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (sut: RemoteNewsLoader, client: HTTPClientSpy) {
+    private func makeSUT(url: URL = URL(string: "https://a-url.com")!, file: StaticString = #file, line: UInt = #line) -> (sut: RemoteNewsLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
         let sut = RemoteNewsLoader(url: url, client: client)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
     
     private func expect(_ sut: RemoteNewsLoader, toCompleteWith result: RemoteNewsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
