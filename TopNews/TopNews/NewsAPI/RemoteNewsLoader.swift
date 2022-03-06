@@ -22,6 +22,7 @@ class RemoteNewsLoader {
     
     public enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     init(url: URL, client: HTTPClient) {
@@ -30,8 +31,13 @@ class RemoteNewsLoader {
     }
     
     func load(completion: @escaping (Error) -> Void = {_ in }) {
-        client.get(from: url){ _ in
-            completion(.connectivity)
+        client.get(from: url){ result in
+            switch result {
+            case .success:
+                completion(.invalidData)
+            case .failure:
+                completion(.connectivity)
+            }
         }
     }
 }
