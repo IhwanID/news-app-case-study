@@ -24,10 +24,6 @@ final class NewsItemMapper {
         let url: URL
         let urlToImage: URL
         let publishedAt: Date
-        
-        var item: NewsItem {
-            return NewsItem(title: title, author: author, source: source.name, description: description, content: content, newsURL: url, imageURL: urlToImage, publishedAt: publishedAt)
-        }
     }
     
     private struct Source: Decodable {
