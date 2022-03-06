@@ -88,6 +88,20 @@ class RemoteNewsLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+            let url = URL(string: "http://any-url.com")!
+            let client = HTTPClientSpy()
+            var sut: RemoteNewsLoader? = RemoteNewsLoader(url: url, client: client)
+
+            var capturedResults = [RemoteNewsLoader.Result]()
+            sut?.load { capturedResults.append($0) }
+
+            sut = nil
+            client.complete(withStatusCode: 200, data: makeItemsJSON([]))
+
+            XCTAssertTrue(capturedResults.isEmpty)
+        }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "https://a-url.com")!) -> (sut: RemoteNewsLoader, client: HTTPClientSpy) {
