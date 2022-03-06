@@ -36,7 +36,7 @@ class RemoteNewsLoader {
         self.client = client
     }
     
-    func load(completion: @escaping (Result) -> Void = {_ in }) {
+    func load(completion: @escaping (Result) -> Void) {
         client.get(from: url){ [weak self] result in
             guard self != nil else { return }
             
