@@ -38,13 +38,13 @@ class RemoteNewsLoaderTests: XCTestCase {
     func test_load_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         
-        var capturedErrors = [RemoteNewsLoader.Error]()
+        var capturedErrors = [RemoteNewsLoader.Result]()
         sut.load { capturedErrors.append($0) }
         
         let clientError = NSError(domain: "Test", code: 0)
         client.complete(with: clientError)
         
-        XCTAssertEqual(capturedErrors, [.connectivity])
+        XCTAssertEqual(capturedErrors, [.failure(.connectivity)])
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() {
@@ -53,13 +53,25 @@ class RemoteNewsLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { index, code in
-            var capturedErrors = [RemoteNewsLoader.Error]()
+            var capturedErrors = [RemoteNewsLoader.Result]()
             sut.load { capturedErrors.append($0) }
             
-            client.complete(withStatusCode: code, at: index)
+            let json = ["items": []]
+            let data =  try! JSONSerialization.data(withJSONObject: json)
             
-            XCTAssertEqual(capturedErrors, [.invalidData])
+            client.complete(withStatusCode: code, data: data, at: index)
+            
+            XCTAssertEqual(capturedErrors, [.failure(.invalidData)])
         }
+    }
+    
+    func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
+        let (sut, client) = makeSUT()
+        
+        expect(sut, toCompleteWith: .failure(.invalidData), when: {
+            let invalidJSON = Data( "invalid json".utf8)
+            client.complete(withStatusCode: 200, data: invalidJSON)
+        })
     }
     
     // MARK: - Helpers
@@ -68,6 +80,15 @@ class RemoteNewsLoaderTests: XCTestCase {
         let client = HTTPClientSpy()
         let sut = RemoteNewsLoader(url: url, client: client)
         return (sut, client)
+    }
+    
+    private func expect(_ sut: RemoteNewsLoader, toCompleteWith result: RemoteNewsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        var capturedResults = [RemoteNewsLoader.Result]()
+        sut.load { capturedResults.append($0) }
+        
+        action()
+        
+        XCTAssertEqual(capturedResults, [result], file: file, line: line)
     }
     
     private class HTTPClientSpy: HTTPClient {
@@ -84,14 +105,14 @@ class RemoteNewsLoaderTests: XCTestCase {
             messages[index].completion(.failure(error))
         }
         
-        func complete(withStatusCode code: Int, at index: Int = 0) {
+        func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
             let response = HTTPURLResponse(
                 url: requestedURLs[index],
                 statusCode: code,
                 httpVersion: nil,
                 headerFields: nil
             )!
-            messages[index].completion(.success(response))
+            messages[index].completion(.success(data, response))
         }
         
     }

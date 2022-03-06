@@ -17,3 +17,5 @@ struct NewsItem {
     let publishedAt: Date
     let content: String
 }
+
+extension NewsItem : Equatable {}

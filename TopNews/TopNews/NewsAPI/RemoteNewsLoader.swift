@@ -8,7 +8,7 @@
 import Foundation
 
 public enum HTTPClientResult {
-    case success(HTTPURLResponse)
+    case success(Data, HTTPURLResponse)
     case failure(Error)
 }
 
@@ -25,18 +25,28 @@ class RemoteNewsLoader {
         case invalidData
     }
     
+    public enum Result: Equatable {
+        case success([NewsItem])
+        case failure(Error)
+    }
+    
+    
     init(url: URL, client: HTTPClient) {
         self.url = url
         self.client = client
     }
     
-    func load(completion: @escaping (Error) -> Void = {_ in }) {
+    func load(completion: @escaping (Result) -> Void = {_ in }) {
         client.get(from: url){ result in
             switch result {
-            case .success:
-                completion(.invalidData)
+            case let .success(data, response):
+                if let _ = try? JSONSerialization.jsonObject(with: data), response.statusCode == 200 {
+                    completion(.success([]))
+                } else {
+                    completion(.failure(.invalidData))
+                }
             case .failure:
-                completion(.connectivity)
+                completion(.failure(.connectivity))
             }
         }
     }
