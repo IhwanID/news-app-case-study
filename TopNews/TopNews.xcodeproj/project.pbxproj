@@ -13,6 +13,7 @@
 		60069DD627D4B0DD0036C308 /* NewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60069DD527D4B0DC0036C308 /* NewsItem.swift */; };
 		60069DD927D4B1140036C308 /* NewsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60069DD827D4B1140036C308 /* NewsLoader.swift */; };
 		60069DDC27D4BD2A0036C308 /* RemoteNewsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60069DDB27D4BD2A0036C308 /* RemoteNewsLoader.swift */; };
+		6044173D27D5116900FECBD7 /* NewsItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044173C27D5116900FECBD7 /* NewsItemMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,7 @@
 		60069DD527D4B0DC0036C308 /* NewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
 		60069DD827D4B1140036C308 /* NewsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsLoader.swift; sourceTree = "<group>"; };
 		60069DDB27D4BD2A0036C308 /* RemoteNewsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNewsLoader.swift; sourceTree = "<group>"; };
+		6044173C27D5116900FECBD7 /* NewsItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				60069DDB27D4BD2A0036C308 /* RemoteNewsLoader.swift */,
+				6044173C27D5116900FECBD7 /* NewsItemMapper.swift */,
 			);
 			path = NewsAPI;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6044173D27D5116900FECBD7 /* NewsItemMapper.swift in Sources */,
 				60069DD627D4B0DD0036C308 /* NewsItem.swift in Sources */,
 				60069DD927D4B1140036C308 /* NewsLoader.swift in Sources */,
 				60069DDC27D4BD2A0036C308 /* RemoteNewsLoader.swift in Sources */,

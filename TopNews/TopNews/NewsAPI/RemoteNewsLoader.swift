@@ -42,43 +42,11 @@ class RemoteNewsLoader {
             
             switch result {
             case let .success(data, response):
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                if let root = try? decoder.decode(Root.self, from: data) , response.statusCode == 200 {
-                    completion(.success(root.news))
-                } else {
-                    completion(.failure(.invalidData))
-                }
+               completion(NewsItemMapper.map(data, from: response))
             case .failure:
                 completion(.failure(.connectivity))
             }
         }
-    }
-    
-    private struct Root: Decodable {
-        let articles: [Item]
-        var news: [NewsItem] {
-            articles.map { NewsItem(title: $0.title, author: $0.author, source: $0.source.name, description: $0.description, content: $0.content, newsURL: $0.url, imageURL: $0.urlToImage, publishedAt: $0.publishedAt) }
-        }
-    }
-    
-    private struct Item: Decodable {
-        let title: String
-        let author: String?
-        let source: Source
-        let description: String
-        let content: String
-        let url: URL
-        let urlToImage: URL
-        let publishedAt: Date
-        
-        var item: NewsItem {
-            return NewsItem(title: title, author: author, source: source.name, description: description, content: content, newsURL: url, imageURL: urlToImage, publishedAt: publishedAt)
-        }
-    }
-    
-    private struct Source: Decodable {
-        let name: String
     }
     
 }
