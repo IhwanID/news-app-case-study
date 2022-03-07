@@ -9,7 +9,7 @@ import Foundation
 
 enum LoadNewsResult {
     case success([NewsItem])
-    case error(Error)
+    case failure(Error)
 }
 
 protocol NewsLoader {

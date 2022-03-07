@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RemoteNewsLoader {
+class RemoteNewsLoader: NewsLoader {
     private let client: HTTPClient
     private let url: URL
     
@@ -16,10 +16,7 @@ class RemoteNewsLoader {
         case invalidData
     }
     
-    public enum Result: Equatable {
-        case success([NewsItem])
-        case failure(Error)
-    }
+    public typealias Result = LoadNewsResult
     
     
     init(url: URL, client: HTTPClient) {
@@ -35,7 +32,7 @@ class RemoteNewsLoader {
             case let .success(data, response):
                completion(NewsItemMapper.map(data, from: response))
             case .failure:
-                completion(.failure(.connectivity))
+                completion(.failure(Error.connectivity))
             }
         }
     }
