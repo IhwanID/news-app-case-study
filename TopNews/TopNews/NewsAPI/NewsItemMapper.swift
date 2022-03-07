@@ -38,7 +38,7 @@ final class NewsItemMapper {
         
         guard response.statusCode == OK_200,
               let root = try? decoder.decode(Root.self, from: data)
-        else { return .failure(.invalidData) }
+        else { return .failure(RemoteNewsLoader.Error.invalidData) }
         
         return .success(root.news)
     }
