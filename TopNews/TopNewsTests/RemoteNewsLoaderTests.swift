@@ -51,7 +51,7 @@ class RemoteNewsLoaderTests: XCTestCase {
         
         samples.enumerated().forEach { index, code in
             expect(sut, toCompleteWith: failure(.invalidData), when: {
-                let json = ["items": []]
+                let json = ["articles": []]
                 let data =  try! JSONSerialization.data(withJSONObject: json)
                 
                 client.complete(withStatusCode: code, data: data, at: index)
@@ -70,7 +70,7 @@ class RemoteNewsLoaderTests: XCTestCase {
     
     func test_load_deliversItemsOn200HTTPResponseWithJSONItems() {
         let (sut, client) = makeSUT()
-        let item1 = makeItem(title: "News 1", author: nil, source: "A Source", description: "A Desc", content: "A Content", newsURL: URL(string: "http://another-url.com")!, imageURL: URL(string: "http://another-url.com")!, publishedAt: (Date(timeIntervalSince1970: 1577881882), "2020-01-01T12:31:22+00:00"))
+        let item1 = makeItem(title: "News 1", author: nil, source: "A Source", description: "A Desc", content: nil, newsURL: URL(string: "http://another-url.com")!, imageURL: nil, publishedAt: (Date(timeIntervalSince1970: 1577881882), "2020-01-01T12:31:22+00:00"))
         
         let item2 = makeItem(title: "News 2", author: "A Person", source: "Source", description: "Desc", content: "Content", newsURL: URL(string: "http://another-url.com")!, imageURL: URL(string: "http://another-url.com")!, publishedAt: (Date(timeIntervalSince1970: 1598627222), "2020-08-28T15:07:02+00:00"))
         
@@ -129,7 +129,7 @@ class RemoteNewsLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func makeItem(title: String, author: String? = nil, source: String, description: String,  content: String, newsURL: URL, imageURL: URL, publishedAt: (date: Date, iso8601String: String)) -> (model: NewsItem, json: [String: Any]) {
+    private func makeItem(title: String, author: String? = nil, source: String, description: String,  content: String? = nil, newsURL: URL, imageURL: URL? = nil, publishedAt: (date: Date, iso8601String: String)) -> (model: NewsItem, json: [String: Any]) {
         let item = NewsItem(title: title, author: author, source: source, description: description, content: content, newsURL: newsURL, imageURL: imageURL, publishedAt: publishedAt.date)
         
         let json: [String: Any] = [
@@ -138,7 +138,7 @@ class RemoteNewsLoaderTests: XCTestCase {
             "description": description,
             "content": content,
             "url": newsURL.absoluteString,
-            "urlToImage": imageURL.absoluteString,
+            "urlToImage": imageURL?.absoluteString,
             "publishedAt": publishedAt.iso8601String,
             "source": [
                 "name": source
