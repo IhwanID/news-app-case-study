@@ -20,9 +20,9 @@ final class NewsItemMapper {
         let author: String?
         let source: Source
         let description: String
-        let content: String
+        let content: String?
         let url: URL
-        let urlToImage: URL
+        let urlToImage: URL?
         let publishedAt: Date
     }
     
@@ -38,7 +38,9 @@ final class NewsItemMapper {
         
         guard response.statusCode == OK_200,
               let root = try? decoder.decode(Root.self, from: data)
-        else { return .failure(RemoteNewsLoader.Error.invalidData) }
+        else {
+            return .failure(RemoteNewsLoader.Error.invalidData)
+        }
         
         return .success(root.news)
     }

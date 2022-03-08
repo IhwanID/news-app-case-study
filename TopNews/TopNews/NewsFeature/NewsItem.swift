@@ -12,9 +12,9 @@ struct NewsItem {
     let author: String?
     let source: String
     let description: String
-    let content: String
+    let content: String?
     let newsURL: URL
-    let imageURL: URL
+    let imageURL: URL?
     let publishedAt: Date
 }
 

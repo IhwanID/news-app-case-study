@@ -50,6 +50,16 @@
                ReferencedContainer = "container:TopNews.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "60752AA627D7962E004B3921"
+               BuildableName = "TopNewsEndToEndTests.xctest"
+               BlueprintName = "TopNewsEndToEndTests"
+               ReferencedContainer = "container:TopNews.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
