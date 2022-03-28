@@ -8,7 +8,7 @@
 import XCTest
 @testable import TopNews
 
-class RemoteNewsLoaderTests: XCTestCase {
+class LoadNewsFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
         let (_, client) = makeSUT()
