@@ -33,8 +33,8 @@ class NewsStore {
     typealias DeletionCompletion = (Error?) -> Void
     
     enum ReceivedMessage: Equatable {
-            case deleteCachedFeed
-            case insert([NewsItem], Date)
+        case deleteCachedFeed
+        case insert([NewsItem], Date)
     }
     
     private(set) var receivedMessages = [ReceivedMessage]()
@@ -84,7 +84,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         store.completeDeletion(with: deletionError)
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
-    
+        
     }
     
     func test_save_requestsNewCacheInsertionWithTimestampOnSuccessfulDeletion() {
@@ -99,22 +99,22 @@ class CacheNewsUseCaseTests: XCTestCase {
     }
     
     func test_save_failsOnDeletionError() {
-            let items = [uniqueItem(), uniqueItem()]
-            let (sut, store) = makeSUT()
-            let deletionError = anyNSError()
-            let exp = expectation(description: "Wait for save completion")
-
-            var receivedError: Error?
-            sut.save(items) { error in
-                receivedError = error
-                exp.fulfill()
-            }
-
-            store.completeDeletion(with: deletionError)
-            wait(for: [exp], timeout: 1.0)
-
-            XCTAssertEqual(receivedError as NSError?, deletionError)
+        let items = [uniqueItem(), uniqueItem()]
+        let (sut, store) = makeSUT()
+        let deletionError = anyNSError()
+        let exp = expectation(description: "Wait for save completion")
+        
+        var receivedError: Error?
+        sut.save(items) { error in
+            receivedError = error
+            exp.fulfill()
         }
+        
+        store.completeDeletion(with: deletionError)
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(receivedError as NSError?, deletionError)
+    }
     
     // MARK: - Helpers
     private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalNewsLoader, store: NewsStore) {
