@@ -6,15 +6,26 @@
 //
 
 import XCTest
+@testable import TopNews
 
 class LocalNewsLoader {
+    private let store: NewsStore
+    
     init(store: NewsStore) {
-        
+        self.store = store
+    }
+    
+    func save(_ items: [NewsItem]) {
+        store.deleteCachedNews()
     }
 }
 
 class NewsStore {
     var deleteCachedNewsCallCount = 0
+    
+    func deleteCachedNews() {
+        deleteCachedNewsCallCount += 1
+    }
 }
 
 class CacheNewsUseCaseTests: XCTestCase {
@@ -25,5 +36,25 @@ class CacheNewsUseCaseTests: XCTestCase {
         
         XCTAssertEqual(store.deleteCachedNewsCallCount, 0)
     }
+    
+    func test_save_requestsCacheDeletion() {
+            let store = NewsStore()
+            let sut = LocalNewsLoader(store: store)
+            let items = [uniqueItem(), uniqueItem()]
+
+            sut.save(items)
+
+            XCTAssertEqual(store.deleteCachedNewsCallCount, 1)
+        }
+
+    // MARK: - Helpers
+        
+        private func uniqueItem() -> NewsItem {
+            return NewsItem(title: "A title", author: "An Author", source: "A Source", description: "A Desc", content: "A content", newsURL: anyURL(), imageURL: anyURL(), publishedAt: Date())
+        }
+
+        private func anyURL() -> URL {
+            return URL(string: "http://any-url.com")!
+        }
     
 }
