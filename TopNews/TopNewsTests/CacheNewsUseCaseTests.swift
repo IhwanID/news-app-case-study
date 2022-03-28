@@ -31,30 +31,34 @@ class NewsStore {
 class CacheNewsUseCaseTests: XCTestCase {
     
     func test_init_doesNotDeleteCacheUponCreation() {
-        let store = NewsStore()
+        let (_, store) = makeSUT()
         _ = LocalNewsLoader(store: store)
         
         XCTAssertEqual(store.deleteCachedNewsCallCount, 0)
     }
     
     func test_save_requestsCacheDeletion() {
-            let store = NewsStore()
-            let sut = LocalNewsLoader(store: store)
-            let items = [uniqueItem(), uniqueItem()]
-
-            sut.save(items)
-
-            XCTAssertEqual(store.deleteCachedNewsCallCount, 1)
-        }
-
-    // MARK: - Helpers
+        let (sut, store) = makeSUT()
+        let items = [uniqueItem(), uniqueItem()]
         
-        private func uniqueItem() -> NewsItem {
-            return NewsItem(title: "A title", author: "An Author", source: "A Source", description: "A Desc", content: "A content", newsURL: anyURL(), imageURL: anyURL(), publishedAt: Date())
-        }
-
-        private func anyURL() -> URL {
-            return URL(string: "http://any-url.com")!
-        }
+        sut.save(items)
+        
+        XCTAssertEqual(store.deleteCachedNewsCallCount, 1)
+    }
+    
+    // MARK: - Helpers
+    private func makeSUT() -> (sut: LocalNewsLoader, store: NewsStore) {
+        let store = NewsStore()
+        let sut = LocalNewsLoader(store: store)
+        return (sut, store)
+    }
+    
+    private func uniqueItem() -> NewsItem {
+        return NewsItem(title: "A title", author: "An Author", source: "A Source", description: "A Desc", content: "A content", newsURL: anyURL(), imageURL: anyURL(), publishedAt: Date())
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "http://any-url.com")!
+    }
     
 }
