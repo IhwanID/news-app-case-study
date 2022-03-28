@@ -27,7 +27,7 @@ class TopNewsEndToEndTests: XCTestCase {
     
     private func getNewsResult(file: StaticString = #file, line: UInt = #line) -> LoadNewsResult? {
         let testServerURL = URL(string: "https://gist.githubusercontent.com/IhwanID/8f720a52f2afbc5ba4b92571274357ba/raw/7c63b66855327bc64e5cb81b21e2d18e8a6c7853/news.json")!
-        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let loader = RemoteNewsLoader(url: testServerURL, client: client)
         trackForMemoryLeaks(client, file: file, line: line)
         trackForMemoryLeaks(loader, file: file, line: line)
