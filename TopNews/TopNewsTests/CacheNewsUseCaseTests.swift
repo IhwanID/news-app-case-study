@@ -16,20 +16,38 @@ class LocalNewsLoader {
     }
     
     func save(_ items: [NewsItem]) {
-        store.deleteCachedNews()
+        store.deleteCachedNews{ [unowned self] error in
+            if error == nil {
+                self.store.insert(items)
+            }
+        }
+        
     }
 }
 
 class NewsStore {
+    
+    typealias DeletionCompletion = (Error?) -> Void
+    
     var deleteCachedNewsCallCount = 0
     var insertCallCount = 0
+    private var deletionCompletions = [DeletionCompletion]()
     
-    func deleteCachedNews() {
+    func deleteCachedNews(completion: @escaping DeletionCompletion) {
         deleteCachedNewsCallCount += 1
+        deletionCompletions.append(completion)
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
-        
+        deletionCompletions[index](error)
+    }
+    
+    func completeDeletionSuccessfully(at index: Int = 0) {
+        deletionCompletions[index](nil)
+    }
+    
+    func insert(_ items: [NewsItem]) {
+        insertCallCount += 1
     }
 }
 
@@ -60,6 +78,16 @@ class CacheNewsUseCaseTests: XCTestCase {
         store.completeDeletion(with: deletionError)
         
         XCTAssertEqual(store.insertCallCount, 0)
+    }
+    
+    func test_save_requestsNewCacheInsertionOnSuccessfulDeletion() {
+        let items = [uniqueItem(), uniqueItem()]
+        let (sut, store) = makeSUT()
+        
+        sut.save(items)
+        store.completeDeletionSuccessfully()
+        
+        XCTAssertEqual(store.insertCallCount, 1)
     }
     
     // MARK: - Helpers
