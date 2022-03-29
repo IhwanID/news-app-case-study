@@ -8,37 +8,6 @@
 import XCTest
 @testable import TopNews
 
-class LocalNewsLoader {
-    private let store: NewsStore
-    private let currentDate: () -> Date
-    
-    init(store: NewsStore, currentDate: @escaping () -> Date) {
-        self.store = store
-        self.currentDate = currentDate
-    }
-    
-    func save(_ items: [NewsItem], completion: @escaping (Error?) -> Void = { _ in }) {
-        store.deleteCachedNews{ [unowned self] error in
-            
-            if error == nil {
-                self.store.insert(items, timestamp: self.currentDate(), completion: completion)
-            } else {
-                completion(error)
-            }
-        }
-        
-    }
-}
-
-protocol NewsStore {
-    
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-    
-    func deleteCachedNews(completion: @escaping DeletionCompletion)
-    func insert(_ items: [NewsItem], timestamp: Date, completion: @escaping InsertionCompletion)
-}
-
 class CacheNewsUseCaseTests: XCTestCase {
     
     func test_init_doesNotDeleteCacheUponCreation() {
@@ -104,6 +73,33 @@ class CacheNewsUseCaseTests: XCTestCase {
             store.completeDeletionSuccessfully()
             store.completeInsertionSuccessfully()
         })
+    }
+    
+    func test_save_doesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated() {
+        let store = NewsStoreSpy()
+        var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults = [Error?]()
+        sut?.save([uniqueItem()]) { receivedResults.append($0) }
+        
+        sut = nil
+        store.completeDeletion(with: anyNSError())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
+    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated() {
+        let store = NewsStoreSpy()
+        var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults = [Error?]()
+        sut?.save([uniqueItem()]) { receivedResults.append($0) }
+        
+        store.completeDeletionSuccessfully()
+        sut = nil
+        store.completeInsertion(with: anyNSError())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
     }
     
     // MARK: - Helpers
