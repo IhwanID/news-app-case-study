@@ -8,6 +8,8 @@
 import Foundation
 
 class LocalNewsLoader {
+    public typealias SaveResult = Error?
+    
     private let store: NewsStore
     private let currentDate: () -> Date
     
@@ -16,7 +18,7 @@ class LocalNewsLoader {
         self.currentDate = currentDate
     }
     
-    func save(_ items: [NewsItem], completion: @escaping (Error?) -> Void = { _ in }) {
+    func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
         store.deleteCachedNews{ [weak self] error in
             guard let self = self else { return }
             
@@ -28,7 +30,7 @@ class LocalNewsLoader {
         }
     }
     
-    private func cache(_ items: [NewsItem], with completion: @escaping (Error?) -> Void){
+    private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
         self.store.insert(items, timestamp: self.currentDate()){ [weak self] error in
             guard self != nil else { return }
             completion(error)
