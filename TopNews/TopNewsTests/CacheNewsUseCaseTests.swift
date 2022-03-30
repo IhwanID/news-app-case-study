@@ -21,7 +21,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         
         sut.save(uniqueItems().models)
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedNews])
     }
     
     func test_save_doesNotRequestCacheInsertionOnDeletionError() {
@@ -31,7 +31,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         sut.save(uniqueItems().models)
         store.completeDeletion(with: deletionError)
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedNews])
         
     }
     
@@ -43,7 +43,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         sut.save(items.models)
         store.completeDeletionSuccessfully()
         
-        XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(items.local, timestamp)])
+        XCTAssertEqual(store.receivedMessages, [.deleteCachedNews, .insert(items.local, timestamp)])
     }
     
     func test_save_failsOnDeletionError() {
@@ -126,7 +126,7 @@ class CacheNewsUseCaseTests: XCTestCase {
     
     private class NewsStoreSpy: NewsStore {
         enum ReceivedMessage: Equatable {
-            case deleteCachedFeed
+            case deleteCachedNews
             case insert([LocalNewsItem], Date)
         }
         
@@ -136,7 +136,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         
         func deleteCachedNews(completion: @escaping DeletionCompletion) {
             deletionCompletions.append(completion)
-            receivedMessages.append(.deleteCachedFeed)
+            receivedMessages.append(.deleteCachedNews)
         }
         
         func completeDeletion(with error: Error, at index: Int = 0) {
