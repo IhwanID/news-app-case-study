@@ -31,9 +31,15 @@ class LocalNewsLoader {
     }
     
     private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
-        self.store.insert(items, timestamp: self.currentDate()){ [weak self] error in
+        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
             guard self != nil else { return }
             completion(error)
         }
+    }
+}
+
+private extension Array where Element == NewsItem {
+    func toLocal() -> [LocalNewsItem] {
+        return map { LocalNewsItem(title: $0.title, author: $0.author, source: $0.source, description: $0.description, content: $0.content, newsURL: $0.newsURL, imageURL: $0.imageURL, publishedAt: $0.publishedAt) }
     }
 }

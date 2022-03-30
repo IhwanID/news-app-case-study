@@ -12,5 +12,5 @@ protocol NewsStore {
     typealias InsertionCompletion = (LocalNewsLoader.SaveResult) -> Void
     
     func deleteCachedNews(completion: @escaping DeletionCompletion)
-    func insert(_ items: [NewsItem], timestamp: Date, completion: @escaping InsertionCompletion)
+    func insert(_ items: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion)
 }
