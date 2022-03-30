@@ -7,21 +7,6 @@
 
 import Foundation
 
-internal struct RemoteNewsItem: Decodable {
-    internal let title: String
-    internal let author: String?
-    internal let source: Source
-    internal let description: String
-    internal let content: String?
-    internal let url: URL
-    internal let urlToImage: URL?
-    internal let publishedAt: Date
-}
-
-internal struct Source: Decodable {
-    internal let name: String
-}
-
 final class NewsItemMapper {
     private struct Root: Decodable {
         let articles: [RemoteNewsItem]
