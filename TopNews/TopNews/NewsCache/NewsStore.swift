@@ -10,8 +10,9 @@ import Foundation
 protocol NewsStore {
     typealias DeletionCompletion = (LocalNewsLoader.SaveResult) -> Void
     typealias InsertionCompletion = (LocalNewsLoader.SaveResult) -> Void
+    typealias RetrievalCompletion = (LocalNewsLoader.SaveResult) -> Void
     
     func deleteCachedNews(completion: @escaping DeletionCompletion)
     func insert(_ items: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion)
-    func retrieve()
+    func retrieve(completion: @escaping RetrievalCompletion)
 }
