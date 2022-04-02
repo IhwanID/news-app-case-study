@@ -9,6 +9,7 @@ import Foundation
 
 class LocalNewsLoader {
     public typealias SaveResult = Error?
+    public typealias LoadResult = LoadNewsResult
     
     private let store: NewsStore
     private let currentDate: () -> Date
@@ -30,9 +31,13 @@ class LocalNewsLoader {
         }
     }
     
-    public func load(completion: @escaping (Error?) -> Void) {
-            store.retrieve(completion: completion)
-    }
+    public func load(completion: @escaping (LoadResult) -> Void) {
+            store.retrieve { error in
+                if let error = error {
+                    completion(.failure(error))
+                }
+            }
+        }
     
     private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
         self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
