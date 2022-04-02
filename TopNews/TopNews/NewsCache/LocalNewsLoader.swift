@@ -32,14 +32,18 @@ class LocalNewsLoader {
     }
     
     public func load(completion: @escaping (LoadResult) -> Void) {
-            store.retrieve { error in
-                if let error = error {
-                    completion(.failure(error))
-                } else {
-                    completion(.success([]))
-                }
+        store.retrieve { result in
+            switch result {
+            case let .failure(error):
+                completion(.failure(error))
+            case let .found(news, _):
+                completion(.success(news.toModels()))
+                
+            case .empty:
+                completion(.success([]))
             }
         }
+    }
     
     private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
         self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
@@ -52,5 +56,11 @@ class LocalNewsLoader {
 private extension Array where Element == NewsItem {
     func toLocal() -> [LocalNewsItem] {
         return map { LocalNewsItem(title: $0.title, author: $0.author, source: $0.source, description: $0.description, content: $0.content, newsURL: $0.newsURL, imageURL: $0.imageURL, publishedAt: $0.publishedAt) }
+    }
+}
+
+private extension Array where Element == LocalNewsItem {
+    func toModels() -> [NewsItem] {
+        return map { NewsItem(title: $0.title, author: $0.author, source: $0.source, description: $0.description, content: $0.content, newsURL: $0.newsURL, imageURL: $0.imageURL, publishedAt: $0.publishedAt) }
     }
 }
