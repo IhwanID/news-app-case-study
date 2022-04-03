@@ -77,6 +77,10 @@ class CodableNewsStore {
             completion(error)
         }
     }
+    
+    func deleteCachedNews(completion: @escaping NewsStore.DeletionCompletion) {
+        completion(nil)
+    }
 }
 
 class CodableNewsStoreTests: XCTestCase {
@@ -160,6 +164,19 @@ class CodableNewsStoreTests: XCTestCase {
         let insertionError = insert((news, timestamp), to: sut)
         
         XCTAssertNotNil(insertionError, "Expected cache insertion to fail with an error")
+        expect(sut, toRetrieve: .empty)
+    }
+    
+    func test_delete_hasNoSideEffectsOnEmptyCache() {
+        let sut = makeSUT()
+        let exp = expectation(description: "Wait for cache deletion")
+        
+        sut.deleteCachedNews { deletionError in
+            XCTAssertNil(deletionError, "Expected empty cache deletion to succeed")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
         expect(sut, toRetrieve: .empty)
     }
     
