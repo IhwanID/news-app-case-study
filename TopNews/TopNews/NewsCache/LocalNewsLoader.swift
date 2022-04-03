@@ -20,46 +20,6 @@ class LocalNewsLoader {
         self.currentDate = currentDate
     }
     
-    func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
-        store.deleteCachedNews{ [weak self] error in
-            guard let self = self else { return }
-            
-            if let cacheDeletionError = error {
-                completion(cacheDeletionError)
-            } else {
-                self.cache(items, with: completion)
-            }
-        }
-    }
-    
-    public func load(completion: @escaping (LoadResult) -> Void) {
-        store.retrieve { [weak self] result in
-            guard let self = self  else { return }
-            switch result {
-            case let .failure(error):
-                completion(.failure(error))
-            case let .found(news, timestamp) where self.validate(timestamp):
-                completion(.success(news.toModels()))
-            case .found, .empty:
-                completion(.success([]))
-            }
-        }
-    }
-    
-    public func validateCache() {
-        store.retrieve { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .failure:
-                self.store.deleteCachedNews { _ in }
-            case let .found(_, timestamp) where !self.validate(timestamp):
-                self.store.deleteCachedNews { _ in }
-            case .empty, .found: break
-            }
-        }
-    }
-    
     private var maxCacheAgeInDays: Int {
         return 7
     }
@@ -75,6 +35,52 @@ class LocalNewsLoader {
         self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
             guard self != nil else { return }
             completion(error)
+        }
+    }
+}
+
+extension LocalNewsLoader {
+    func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
+        store.deleteCachedNews{ [weak self] error in
+            guard let self = self else { return }
+            
+            if let cacheDeletionError = error {
+                completion(cacheDeletionError)
+            } else {
+                self.cache(items, with: completion)
+            }
+        }
+    }
+}
+
+extension LocalNewsLoader {
+    public func load(completion: @escaping (LoadResult) -> Void) {
+        store.retrieve { [weak self] result in
+            guard let self = self  else { return }
+            switch result {
+            case let .failure(error):
+                completion(.failure(error))
+            case let .found(news, timestamp) where self.validate(timestamp):
+                completion(.success(news.toModels()))
+            case .found, .empty:
+                completion(.success([]))
+            }
+        }
+    }
+}
+
+extension LocalNewsLoader {
+    public func validateCache() {
+        store.retrieve { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure:
+                self.store.deleteCachedNews { _ in }
+            case let .found(_, timestamp) where !self.validate(timestamp):
+                self.store.deleteCachedNews { _ in }
+            case .empty, .found: break
+            }
         }
     }
 }
