@@ -8,8 +8,6 @@
 import Foundation
 
 class LocalNewsLoader {
-    public typealias SaveResult = Error?
-    public typealias LoadResult = LoadNewsResult
     
     private let store: NewsStore
     private let currentDate: () -> Date
@@ -19,6 +17,21 @@ class LocalNewsLoader {
         self.store = store
         self.currentDate = currentDate
     }
+    
+    private var maxCacheAgeInDays: Int {
+        return 7
+    }
+    
+    private func validate(_ timestamp: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {
+            return false
+        }
+        return currentDate() < maxCacheAge
+    }
+}
+
+extension LocalNewsLoader {
+    public typealias SaveResult = Error?
     
     func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
         store.deleteCachedNews{ [weak self] error in
@@ -32,39 +45,44 @@ class LocalNewsLoader {
         }
     }
     
+    private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
+        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
+            guard self != nil else { return }
+            completion(error)
+        }
+    }
+}
+
+extension LocalNewsLoader: NewsLoader {
+    public typealias LoadResult = LoadNewsResult
+    
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard let self = self  else { return }
             switch result {
             case let .failure(error):
-                self.store.deleteCachedNews { _ in }
                 completion(.failure(error))
             case let .found(news, timestamp) where self.validate(timestamp):
                 completion(.success(news.toModels()))
-            case .found:
-                self.store.deleteCachedNews { _ in }
-                completion(.success([]))
-            case .empty:
+            case .found, .empty:
                 completion(.success([]))
             }
         }
     }
-    
-    private var maxCacheAgeInDays: Int {
-        return 7
-    }
-    
-    private func validate(_ timestamp: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {
-            return false
-        }
-        return currentDate() < maxCacheAge
-    }
-    
-    private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
-        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
-            guard self != nil else { return }
-            completion(error)
+}
+
+extension LocalNewsLoader {
+    public func validateCache() {
+        store.retrieve { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure:
+                self.store.deleteCachedNews { _ in }
+            case let .found(_, timestamp) where !self.validate(timestamp):
+                self.store.deleteCachedNews { _ in }
+            case .empty, .found: break
+            }
         }
     }
 }
