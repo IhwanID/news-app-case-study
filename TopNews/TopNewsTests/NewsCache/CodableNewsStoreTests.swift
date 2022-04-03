@@ -95,14 +95,8 @@ class CodableNewsStoreTests: XCTestCase {
         let sut = makeSUT()
         let news = uniqueNews().local
         let timestamp = Date()
-        let exp = expectation(description: "Wait for cache retrieval")
         
-        sut.insert(news, timestamp: timestamp) { insertionError in
-            XCTAssertNil(insertionError, "Expected News to be inserted successfully")
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
+        insert((news, timestamp), to: sut)
         expect(sut, toRetrieve: .found(news: news, timestamp: timestamp))
     }
     
@@ -110,15 +104,8 @@ class CodableNewsStoreTests: XCTestCase {
         let sut = makeSUT()
         let news = uniqueNews().local
         let timestamp = Date()
-        let exp = expectation(description: "Wait for cache retrieval")
         
-        sut.insert(news, timestamp: timestamp) { insertionError in
-            XCTAssertNil(insertionError, "Expected news to be inserted successfully")
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-        
+        insert((news, timestamp), to: sut)
         expect(sut, toRetrieveTwice: .found(news: news, timestamp: timestamp))
     }
     
@@ -126,6 +113,15 @@ class CodableNewsStoreTests: XCTestCase {
         let sut = CodableNewsStore(storeURL: testSpecificStoreURL())
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func insert(_ cache: (news: [LocalNewsItem], timestamp: Date), to sut: CodableNewsStore) {
+        let exp = expectation(description: "Wait for cache insertion")
+        sut.insert(cache.news, timestamp: cache.timestamp) { insertionError in
+            XCTAssertNil(insertionError, "Expected news to be inserted successfully")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
     }
     
     private func expect(_ sut: CodableNewsStore, toRetrieveTwice expectedResult: RetrieveCachedNewsResult, file: StaticString = #file, line: UInt = #line) {
