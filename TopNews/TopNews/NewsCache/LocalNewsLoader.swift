@@ -41,7 +41,6 @@ class LocalNewsLoader {
             case let .found(news, timestamp) where self.validate(timestamp):
                 completion(.success(news.toModels()))
             case .found:
-                self.store.deleteCachedNews { _ in }
                 completion(.success([]))
             case .empty:
                 completion(.success([]))
@@ -54,7 +53,9 @@ class LocalNewsLoader {
             switch result {
             case .failure:
                 self.store.deleteCachedNews { _ in }
-            default: break
+            case let .found(_, timestamp) where !self.validate(timestamp):
+                self.store.deleteCachedNews { _ in }
+            case .empty, .found: break
             }
         }
     }
