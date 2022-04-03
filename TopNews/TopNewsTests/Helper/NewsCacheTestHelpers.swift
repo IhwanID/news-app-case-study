@@ -22,7 +22,11 @@ func uniqueNews() -> (models: [NewsItem], local: [LocalNewsItem]) {
 extension Date {
     
     func minusNewsCacheMaxAge() -> Date {
-        return adding(days: -7)
+        return adding(days: -newsCacheMaxAgeInDays)
+    }
+    
+    private var newsCacheMaxAgeInDays: Int {
+        return 7
     }
     
     func adding(days: Int) -> Date {
