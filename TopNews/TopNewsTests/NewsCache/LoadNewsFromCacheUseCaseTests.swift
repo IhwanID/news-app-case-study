@@ -41,36 +41,36 @@ class LoadNewsFromCacheUseCaseTests: XCTestCase {
         })
     }
     
-    func test_load_deliversCachedNewsOnLessThanSevenDaysOldCache() {
+    func test_load_deliversCachedNewssOnNonExpiredCache() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let nonExpiredTimestamp = fixedCurrentDate.minusNewsCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         expect(sut, toCompleteWith: .success(news.models), when: {
-            store.completeRetrieval(with: news.local, timestamp: lessThanSevenDaysOldTimestamp)
+            store.completeRetrieval(with: news.local, timestamp: nonExpiredTimestamp)
         })
     }
     
     func test_load_deliversNoNewsOnSevenDaysOldCache() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+        let expirationTimestamp = fixedCurrentDate.minusNewsCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         expect(sut, toCompleteWith: .success([]), when: {
-            store.completeRetrieval(with: news.local, timestamp: sevenDaysOldTimestamp)
+            store.completeRetrieval(with: news.local, timestamp: expirationTimestamp)
         })
     }
     
-    func test_load_deliversNoImagesOnMoreThanSevenDaysOldCache() {
+    func test_load_deliversNoNewsOnExpiredCache() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let expiredTimestamp = fixedCurrentDate.minusNewsCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         expect(sut, toCompleteWith: .success([]), when: {
-            store.completeRetrieval(with: news.local, timestamp: moreThanSevenDaysOldTimestamp)
+            store.completeRetrieval(with: news.local, timestamp: expiredTimestamp)
         })
     }
     
@@ -92,55 +92,54 @@ class LoadNewsFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_hasNoSideEffectsOnLessThanSevenDaysOldCache() {
+    func test_load_deliversCachedNewsOnNonExpiredCache() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let nonExpiredTimestamp = fixedCurrentDate.minusNewsCacheMaxAge().adding(seconds: 1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
-        store.completeRetrieval(with: news.local, timestamp: lessThanSevenDaysOldTimestamp)
+        store.completeRetrieval(with: news.local, timestamp: nonExpiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_hasNoSideEffectsOnSevenDaysOldCache() {
+    func test_load_deliversNoNewsOnCacheExpiration() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+        let expirationTimestamp = fixedCurrentDate.minusNewsCacheMaxAge()
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
-        store.completeRetrieval(with: news.local, timestamp: sevenDaysOldTimestamp)
+        store.completeRetrieval(with: news.local, timestamp: expirationTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_hasNoSideEffectsOnMoreThanSevenDaysOldCache() {
+    func test_load_hasNoSideEffectsOnExpiredCache() {
         let news = uniqueNews()
         let fixedCurrentDate = Date()
-        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let expiredTimestamp = fixedCurrentDate.minusNewsCacheMaxAge().adding(seconds: -1)
         let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
         
         sut.load { _ in }
-        store.completeRetrieval(with: news.local, timestamp: moreThanSevenDaysOldTimestamp)
+        store.completeRetrieval(with: news.local, timestamp: expiredTimestamp)
         
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
-            let store = NewsStoreSpy()
-            var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
-
-            var receivedResults = [LocalNewsLoader.LoadResult]()
-            sut?.load { receivedResults.append($0) }
-
-            sut = nil
-            store.completeRetrievalWithEmptyCache()
-
-            XCTAssertTrue(receivedResults.isEmpty)
-        }
-
+        let store = NewsStoreSpy()
+        var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
+        
+        var receivedResults = [LocalNewsLoader.LoadResult]()
+        sut?.load { receivedResults.append($0) }
+        
+        sut = nil
+        store.completeRetrievalWithEmptyCache()
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
     
     
     // MARK: - Helpers

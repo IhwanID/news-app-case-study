@@ -20,10 +20,21 @@ func uniqueNews() -> (models: [NewsItem], local: [LocalNewsItem]) {
 
 
 extension Date {
-    func adding(days: Int) -> Date {
-        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    
+    func minusNewsCacheMaxAge() -> Date {
+        return adding(days: -newsCacheMaxAgeInDays)
     }
     
+    private var newsCacheMaxAgeInDays: Int {
+        return 7
+    }
+    
+    private func adding(days: Int) -> Date {
+        return Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+}
+
+extension Date {
     func adding(seconds: TimeInterval) -> Date {
         return self + seconds
     }
