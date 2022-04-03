@@ -82,9 +82,12 @@ class CodableNewsStore {
         guard FileManager.default.fileExists(atPath: storeURL.path) else {
             return completion(nil)
         }
-        
-        try! FileManager.default.removeItem(at: storeURL)
-        completion(nil)
+        do {
+            try FileManager.default.removeItem(at: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
 }
 
@@ -190,6 +193,16 @@ class CodableNewsStoreTests: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
+    func test_delete_deliversErrorOnDeletionError() {
+        let noDeletePermissionURL = cachesDirectory()
+        let sut = makeSUT(storeURL: noDeletePermissionURL)
+        
+        let deletionError = deleteCache(from: sut)
+        
+        XCTAssertNotNil(deletionError, "Expected cache deletion to fail")
+        expect(sut, toRetrieve: .empty)
+    }
+    
     // - MARK: Helpers
     
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #file, line: UInt = #line) -> CodableNewsStore {
@@ -212,15 +225,15 @@ class CodableNewsStoreTests: XCTestCase {
     }
     
     private func deleteCache(from sut: CodableNewsStore) -> Error? {
-            let exp = expectation(description: "Wait for cache deletion")
-            var deletionError: Error?
-            sut.deleteCachedNews { receivedDeletionError in
-                deletionError = receivedDeletionError
-                exp.fulfill()
-            }
-            wait(for: [exp], timeout: 1.0)
-            return deletionError
+        let exp = expectation(description: "Wait for cache deletion")
+        var deletionError: Error?
+        sut.deleteCachedNews { receivedDeletionError in
+            deletionError = receivedDeletionError
+            exp.fulfill()
         }
+        wait(for: [exp], timeout: 1.0)
+        return deletionError
+    }
     
     private func expect(_ sut: CodableNewsStore, toRetrieveTwice expectedResult: RetrieveCachedNewsResult, file: StaticString = #file, line: UInt = #line) {
         expect(sut, toRetrieve: expectedResult, file: file, line: line)
@@ -263,6 +276,10 @@ class CodableNewsStoreTests: XCTestCase {
     
     
     private func testSpecificStoreURL() -> URL {
-        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
+        return cachesDirectory().appendingPathComponent("\(type(of: self)).store")
+    }
+    
+    private func cachesDirectory() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     }
 }
