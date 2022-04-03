@@ -10,9 +10,41 @@ import XCTest
 class CodableNewsStore {
     
     private struct Cache: Codable {
-        let news: [LocalNewsItem]
+        let news: [CodableNewsItem]
         let timestamp: Date
+        
+        var localNews: [LocalNewsItem] {
+            return news.map { $0.local }
+        }
     }
+    
+    public struct CodableNewsItem: Codable {
+        public let title: String
+        public let author: String?
+        public let source: String
+        public let description: String
+        public let content: String?
+        public let newsURL: URL
+        public let imageURL: URL?
+        public let publishedAt: Date
+        
+        public init(_ news: LocalNewsItem) {
+            self.title = news.title
+            self.author = news.author
+            self.source = news.source
+            self.description = news.description
+            self.content = news.content
+            self.newsURL = news.newsURL
+            self.imageURL = news.imageURL
+            self.publishedAt = news.publishedAt
+        }
+        
+        var local: LocalNewsItem {
+            return LocalNewsItem(title: title, author: author, source: source, description: description, content: content, newsURL: newsURL, imageURL: imageURL, publishedAt: publishedAt)
+        }
+    }
+    
+    
     private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("news.store")
     
     
@@ -23,12 +55,13 @@ class CodableNewsStore {
         
         let decoder = JSONDecoder()
         let cache = try! decoder.decode(Cache.self, from: data)
-        completion(.found(news: cache.news, timestamp: cache.timestamp))
+        completion(.found(news: cache.localNews, timestamp: cache.timestamp))
     }
     
     func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping NewsStore.InsertionCompletion) {
         let encoder = JSONEncoder()
-        let encoded = try! encoder.encode(Cache(news: news, timestamp: timestamp))
+        let cache = Cache(news: news.map(CodableNewsItem.init), timestamp: timestamp)
+        let encoded = try! encoder.encode(cache)
         try! encoded.write(to: storeURL)
         completion(nil)
     }
