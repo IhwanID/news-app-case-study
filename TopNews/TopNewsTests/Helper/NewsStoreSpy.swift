@@ -61,6 +61,6 @@ class NewsStoreSpy: NewsStore {
     }
     
     func completeRetrieval(with news: [LocalNewsItem], timestamp: Date, at index: Int = 0) {
-            retrievalCompletions[index](.found(news: news, timestamp: timestamp))
-        }
+        retrievalCompletions[index](.found(news: news, timestamp: timestamp))
+    }
 }
