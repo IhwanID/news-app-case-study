@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import TopNews
-class CodableNewsStore {
+class CodableNewsStore: NewsStore {
     
     private struct Cache: Codable {
         let news: [CodableNewsItem]
@@ -50,7 +50,7 @@ class CodableNewsStore {
         self.storeURL = storeURL
     }
     
-    func retrieve(completion: @escaping NewsStore.RetrievalCompletion) {
+    func retrieve(completion: @escaping RetrievalCompletion) {
         guard let data = try? Data(contentsOf: storeURL) else {
             return completion(.empty)
         }
@@ -65,7 +65,7 @@ class CodableNewsStore {
         }
     }
     
-    func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping NewsStore.InsertionCompletion) {
+    func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         
         do {
             let encoder = JSONEncoder()
@@ -78,7 +78,7 @@ class CodableNewsStore {
         }
     }
     
-    func deleteCachedNews(completion: @escaping NewsStore.DeletionCompletion) {
+    func deleteCachedNews(completion: @escaping DeletionCompletion) {
         guard FileManager.default.fileExists(atPath: storeURL.path) else {
             return completion(nil)
         }
