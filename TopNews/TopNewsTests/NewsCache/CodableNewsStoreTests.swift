@@ -70,6 +70,7 @@ class CodableNewsStore {
 }
 
 class CodableNewsStoreTests: XCTestCase {
+    
     override func setUp() {
         super.setUp()
         deleteStoreArtifacts()
@@ -140,6 +141,33 @@ class CodableNewsStoreTests: XCTestCase {
                 }
                 
                 exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
+        let sut = makeSUT()
+        let news = uniqueNews().local
+        let timestamp = Date()
+        let exp = expectation(description: "Wait for cache retrieval")
+        
+        sut.insert(news, timestamp: timestamp) { insertionError in
+            XCTAssertNil(insertionError, "Expected news to be inserted successfully")
+            
+            sut.retrieve { firstResult in
+                sut.retrieve { secondResult in
+                    switch (firstResult, secondResult) {
+                    case let (.found(expectedNews, expectedTimestamp), .found(retrievedNews, retrievedTimestamp)):
+                        XCTAssertEqual(retrievedNews, expectedNews)
+                        XCTAssertEqual(retrievedTimestamp, expectedTimestamp)
+                    default:
+                        XCTFail("Expected retrieving twice from non empty cache to deliver same found result with news \(news) and timestamp \(timestamp), got \(firstResult) and \(secondResult) instead")
+                    }
+                    
+                    exp.fulfill()
+                }
             }
         }
         
