@@ -40,9 +40,7 @@ class LocalNewsLoader {
                 completion(.failure(error))
             case let .found(news, timestamp) where self.validate(timestamp):
                 completion(.success(news.toModels()))
-            case .found:
-                completion(.success([]))
-            case .empty:
+            case .found, .empty:
                 completion(.success([]))
             }
         }
