@@ -44,7 +44,7 @@ class CodableNewsStore: NewsStore {
         }
     }
     
-    private let queue = DispatchQueue(label: "\(CodableNewsStore.self)Queue", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "\(CodableNewsStore.self)Queue", qos: .userInitiated, attributes: .concurrent)
     private let storeURL: URL
     
     init(storeURL: URL) {
@@ -70,7 +70,7 @@ class CodableNewsStore: NewsStore {
     
     func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         let storeURL = self.storeURL
-        queue.async {
+        queue.async(flags: .barrier) {
             do {
                 let encoder = JSONEncoder()
                 let cache = Cache(news: news.map(CodableNewsItem.init), timestamp: timestamp)
@@ -85,7 +85,7 @@ class CodableNewsStore: NewsStore {
     
     func deleteCachedNews(completion: @escaping DeletionCompletion) {
         let storeURL = self.storeURL
-        queue.async {
+        queue.async(flags: .barrier) {
             guard FileManager.default.fileExists(atPath: storeURL.path) else {
                 return completion(nil)
             }
@@ -96,6 +96,5 @@ class CodableNewsStore: NewsStore {
                 completion(error)
             }
         }
-       
     }
 }
