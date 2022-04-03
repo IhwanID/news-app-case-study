@@ -91,7 +91,7 @@ class CodableNewsStoreTests: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
-    func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues() {
+    func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
         let sut = makeSUT()
         let news = uniqueNews().local
         let timestamp = Date()
