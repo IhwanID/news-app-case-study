@@ -8,8 +8,6 @@
 import Foundation
 
 class LocalNewsLoader {
-    public typealias SaveResult = Error?
-    public typealias LoadResult = LoadNewsResult
     
     private let store: NewsStore
     private let currentDate: () -> Date
@@ -30,16 +28,11 @@ class LocalNewsLoader {
         }
         return currentDate() < maxCacheAge
     }
-    
-    private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
-        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
-            guard self != nil else { return }
-            completion(error)
-        }
-    }
 }
 
 extension LocalNewsLoader {
+    public typealias SaveResult = Error?
+    
     func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
         store.deleteCachedNews{ [weak self] error in
             guard let self = self else { return }
@@ -51,9 +44,18 @@ extension LocalNewsLoader {
             }
         }
     }
+    
+    private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
+        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
+            guard self != nil else { return }
+            completion(error)
+        }
+    }
 }
 
 extension LocalNewsLoader: NewsLoader {
+    public typealias LoadResult = LoadNewsResult
+    
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard let self = self  else { return }
