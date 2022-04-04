@@ -66,17 +66,36 @@ class CodableNewsStoreTests: XCTestCase {
         expect(sut, toRetrieveTwice: .failure(anyNSError()))
     }
     
-    func test_insert_overridesPreviouslyInsertedCacheValues() {
+    func test_insert_deliversNoErrorOnEmptyCache() {
         let sut = makeSUT()
         
-        let firstInsertionError = insert((uniqueNews().local, Date()), to: sut)
-        XCTAssertNil(firstInsertionError, "Expected to insert cache successfully")
+        let insertionError = insert((uniqueNews().local, Date()), to: sut)
+        XCTAssertNil(insertionError, "Expected to insert cache successfully")
         
         let latestNews = uniqueNews().local
         let latestTimestamp = Date()
         let latestInsertionError = insert((latestNews, latestTimestamp), to: sut)
         
         XCTAssertNil(latestInsertionError, "Expected to override cache successfully")
+        expect(sut, toRetrieve: .found(news: latestNews, timestamp: latestTimestamp))
+    }
+    
+    func test_insert_deliversNoErrorOnNonEmptyCache() {
+        let sut = makeSUT()
+        insert((uniqueNews().local, Date()), to: sut)
+        
+        let insertionError = insert((uniqueNews().local, Date()), to: sut)
+        
+        XCTAssertNil(insertionError, "Expected to override cache successfully")
+    }
+    
+    func test_insert_overridesPreviouslyInsertedCacheValues() {
+        let sut = makeSUT()
+        insert((uniqueNews().local, Date()), to: sut)
+        let latestNews = uniqueNews().local
+        let latestTimestamp = Date()
+        insert((latestNews, latestTimestamp), to: sut)
+        
         expect(sut, toRetrieve: .found(news: latestNews, timestamp: latestTimestamp))
     }
     
@@ -89,19 +108,34 @@ class CodableNewsStoreTests: XCTestCase {
         let insertionError = insert((news, timestamp), to: sut)
         
         XCTAssertNotNil(insertionError, "Expected cache insertion to fail with an error")
+    }
+    
+    func test_insert_hasNoSideEffectsOnInsertionError() {
+        let invalidStoreURL = URL(string: "invalid://store-url")!
+        let sut = makeSUT(storeURL: invalidStoreURL)
+        let news = uniqueNews().local
+        let timestamp = Date()
+        
+        insert((news, timestamp), to: sut)
+        
         expect(sut, toRetrieve: .empty)
+    }
+    
+    func test_delete_deliversNoErrorOnEmptyCache() {
+        let sut = makeSUT()
+        
+        let deletionError = deleteCache(from: sut)
+        XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed")
     }
     
     func test_delete_hasNoSideEffectsOnEmptyCache() {
         let sut = makeSUT()
         
-        let deletionError = deleteCache(from: sut)
-        XCTAssertNil(deletionError, "Expected non-empty cache deletion to succeed")
-        
+        deleteCache(from: sut)
         expect(sut, toRetrieve: .empty)
     }
     
-    func test_delete_emptiesPreviouslyInsertedCache() {
+    func test_delete_deliversNoErrorOnNonEmptyCache() {
         let sut = makeSUT()
         insert((uniqueNews().local, Date()), to: sut)
         
@@ -110,13 +144,28 @@ class CodableNewsStoreTests: XCTestCase {
         expect(sut, toRetrieve: .empty)
     }
     
+    func test_delete_emptiesPreviouslyInsertedCache() {
+        let sut = makeSUT()
+        insert((uniqueNews().local, Date()), to: sut)
+        
+        deleteCache(from: sut)
+        
+        expect(sut, toRetrieve: .empty)
+    }
+    
     func test_delete_deliversErrorOnDeletionError() {
-        let noDeletePermissionURL = noDeletePermissionURL()
-        let sut = makeSUT(storeURL: noDeletePermissionURL)
+        let sut = makeSUT(storeURL: noDeletePermissionURL())
         
         let deletionError = deleteCache(from: sut)
         
         XCTAssertNotNil(deletionError, "Expected cache deletion to fail")
+    }
+    
+    func test_delete_hasNoSideEffectsOnDeletionError() {
+        let sut = makeSUT(storeURL: noDeletePermissionURL())
+        
+        deleteCache(from: sut)
+        
         expect(sut, toRetrieve: .empty)
     }
     
@@ -168,6 +217,7 @@ class CodableNewsStoreTests: XCTestCase {
         return insertionError
     }
     
+    @discardableResult
     private func deleteCache(from sut: NewsStore) -> Error? {
         let exp = expectation(description: "Wait for cache deletion")
         var deletionError: Error?
