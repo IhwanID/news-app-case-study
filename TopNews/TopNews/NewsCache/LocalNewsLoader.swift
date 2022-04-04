@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LocalNewsLoader {
+public class LocalNewsLoader {
     
     private let store: NewsStore
     private let currentDate: () -> Date

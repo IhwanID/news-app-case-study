@@ -13,7 +13,7 @@ public enum RetrieveCachedNewsResult {
     case failure(Error)
 }
 
-protocol NewsStore {
+public protocol NewsStore {
     typealias DeletionCompletion = (LocalNewsLoader.SaveResult) -> Void
     typealias InsertionCompletion = (LocalNewsLoader.SaveResult) -> Void
     typealias RetrievalCompletion = (RetrieveCachedNewsResult) -> Void

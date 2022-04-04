@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewsItem {
+public struct NewsItem {
     let title: String
     let author: String?
     let source: String
