@@ -12,12 +12,14 @@ class CoreDataNewsStoreTest: XCTestCase, NewsStoreSpecs {
     
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
-
+        
         assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
     }
     
     func test_retrieve_hasNoSideEffectsOnEmptyCache() {
+        let sut = makeSUT()
         
+        assertThatRetrieveHasNoSideEffectsOnEmptyCache(on: sut)
     }
     
     func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
@@ -61,10 +63,10 @@ class CoreDataNewsStoreTest: XCTestCase, NewsStoreSpecs {
     }
     
     // - MARK: Helpers
-        
-        private func makeSUT(file: StaticString = #file, line: UInt = #line) -> NewsStore {
-            let sut = CoreDataNewsStore()
-            trackForMemoryLeaks(sut, file: file, line: line)
-            return sut
-        }
+    
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> NewsStore {
+        let sut = CoreDataNewsStore()
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
 }
