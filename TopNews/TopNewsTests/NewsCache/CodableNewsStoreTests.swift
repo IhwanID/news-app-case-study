@@ -8,7 +8,7 @@
 import XCTest
 @testable import TopNews
 
-class CodableNewsStoreTests: XCTestCase {
+class CodableNewsStoreTests: XCTestCase, FailableNewsStoreSpecs {
     
     override func setUp() {
         super.setUp()
