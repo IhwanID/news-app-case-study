@@ -66,7 +66,8 @@ class CoreDataNewsStoreTest: XCTestCase, NewsStoreSpecs {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> NewsStore {
         let storeBundle = Bundle(for: CoreDataNewsStore.self)
-        let sut = try! CoreDataNewsStore(bundle: storeBundle)
+        let storeURL = URL(fileURLWithPath: "/dev/null")
+        let sut = try! CoreDataNewsStore(storeURL: storeURL, bundle: storeBundle)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
