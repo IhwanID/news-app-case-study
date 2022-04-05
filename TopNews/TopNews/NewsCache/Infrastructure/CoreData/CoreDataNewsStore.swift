@@ -51,7 +51,7 @@ public final class CoreDataNewsStore: NewsStore {
     }
     
     public func deleteCachedNews(completion: @escaping DeletionCompletion) {
-        
+        completion(nil)
     }
     
 }
