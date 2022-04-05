@@ -38,7 +38,7 @@ public final class CoreDataNewsStore: NewsStore {
         let context = self.context
         context.perform {
             do {
-                let managedCache = ManagedCache(context: context)
+                let managedCache = try ManagedCache.newUniqueInstance(in: context)
                 managedCache.timestamp = timestamp
                 managedCache.news = ManagedNewsItem.item(from: news, in: context)
                 
@@ -91,6 +91,11 @@ private extension NSManagedObjectModel {
 internal class ManagedCache: NSManagedObject {
     @NSManaged internal var timestamp: Date
     @NSManaged internal var news: NSOrderedSet
+    
+    static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
+        try find(in: context).map(context.delete)
+        return ManagedCache(context: context)
+    }
     
     var localNews: [LocalNewsItem] {
         return news.compactMap { ($0 as? ManagedNewsItem)?.local }
