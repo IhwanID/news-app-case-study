@@ -41,6 +41,9 @@ class CoreDataNewsStoreTest: XCTestCase, NewsStoreSpecs {
     }
     
     func test_insert_deliversNoErrorOnNonEmptyCache() {
+        let sut = makeSUT()
+        
+        assertThatInsertDeliversNoErrorOnNonEmptyCache(on: sut)
         
     }
     
