@@ -20,9 +20,8 @@ public final class CoreDataNewsStore: NewsStore {
         let context = self.context
         context.perform {
             do {
-                let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
-                request.returnsObjectsAsFaults = false
-                if let cache = try context.fetch(request).first {
+                
+                if let cache = try ManagedCache.find(in: context)  {
                     completion(.found(
                         news: cache.localNews,
                         timestamp: cache.timestamp))
@@ -94,8 +93,14 @@ internal class ManagedCache: NSManagedObject {
     @NSManaged internal var news: NSOrderedSet
     
     var localNews: [LocalNewsItem] {
-            return news.compactMap { ($0 as? ManagedNewsItem)?.local }
-        }
+        return news.compactMap { ($0 as? ManagedNewsItem)?.local }
+    }
+    
+    static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
+        let request = NSFetchRequest<ManagedCache>(entityName: entity().name!)
+        request.returnsObjectsAsFaults = false
+        return try context.fetch(request).first
+    }
 }
 
 @objc(ManagedNewsItem)
@@ -111,21 +116,21 @@ internal class ManagedNewsItem: NSManagedObject {
     @NSManaged internal var cache: ManagedCache
     
     static func item(from localNews: [LocalNewsItem], in context: NSManagedObjectContext) -> NSOrderedSet {
-            return NSOrderedSet(array: localNews.map { local in
-                let managed = ManagedNewsItem(context: context)
-                managed.title = local.title
-                managed.author = local.author
-                managed.source = local.source
-                managed.newsDescription = local.description
-                managed.content = local.content
-                managed.newsURL = local.newsURL
-                managed.imageURL = local.imageURL
-                managed.publishedAt = local.publishedAt
-                return managed
-            })
-        }
-
-        var local: LocalNewsItem {
-            return LocalNewsItem(title: title, author: author, source: source, description: newsDescription, content: content, newsURL: newsURL, imageURL: imageURL, publishedAt: publishedAt)
-        }
+        return NSOrderedSet(array: localNews.map { local in
+            let managed = ManagedNewsItem(context: context)
+            managed.title = local.title
+            managed.author = local.author
+            managed.source = local.source
+            managed.newsDescription = local.description
+            managed.content = local.content
+            managed.newsURL = local.newsURL
+            managed.imageURL = local.imageURL
+            managed.publishedAt = local.publishedAt
+            return managed
+        })
+    }
+    
+    var local: LocalNewsItem {
+        return LocalNewsItem(title: title, author: author, source: source, description: newsDescription, content: content, newsURL: newsURL, imageURL: imageURL, publishedAt: publishedAt)
+    }
 }
