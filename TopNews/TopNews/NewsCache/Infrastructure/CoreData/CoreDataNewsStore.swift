@@ -17,11 +17,53 @@ public final class CoreDataNewsStore: NewsStore {
     }
     
     public func retrieve(completion: @escaping RetrievalCompletion) {
-        completion(.empty)
+        let context = self.context
+        context.perform {
+            do {
+                let request = NSFetchRequest<ManagedCache>(entityName: ManagedCache.entity().name!)
+                request.returnsObjectsAsFaults = false
+                if let cache = try context.fetch(request).first {
+                    completion(.found(
+                        news: cache.news
+                            .compactMap { ($0 as? ManagedNewsItem) }
+                            .map {
+                                LocalNewsItem(title: $0.title, author: $0.author, source: $0.source, description: $0.newsDescription, content: $0.content, newsURL: $0.newsURL, imageURL: $0.imageURL, publishedAt: $0.publishedAt)
+                            },
+                        timestamp: cache.timestamp))
+                } else {
+                    completion(.empty)
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
     public func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
-        
+        let context = self.context
+        context.perform {
+            do {
+                let managedCache = ManagedCache(context: context)
+                managedCache.timestamp = timestamp
+                managedCache.news = NSOrderedSet(array: news.map { local in
+                    let managed = ManagedNewsItem(context: context)
+                    managed.title = local.title
+                    managed.author = local.author
+                    managed.source = local.source
+                    managed.newsDescription = local.description
+                    managed.content = local.content
+                    managed.newsURL = local.newsURL
+                    managed.imageURL = local.imageURL
+                    managed.publishedAt = local.publishedAt
+                    return managed
+                })
+                
+                try context.save()
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
     }
     
     public func deleteCachedNews(completion: @escaping DeletionCompletion) {
