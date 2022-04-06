@@ -41,7 +41,7 @@ class CodableNewsStoreTests: XCTestCase, FailableNewsStoreSpecs {
         let timestamp = Date()
         
         insert((news, timestamp), to: sut)
-        expect(sut, toRetrieveTwice: .success(.found(news: news, timestamp: timestamp)))
+        expect(sut, toRetrieveTwice: .success(CachedNews(news: news, timestamp: timestamp)))
     }
     
     func test_retrieve_deliversFailureOnRetrievalError() {
@@ -123,7 +123,7 @@ class CodableNewsStoreTests: XCTestCase, FailableNewsStoreSpecs {
         
         deleteCache(from: sut)
         
-        expect(sut, toRetrieve: .success(.empty))
+        expect(sut, toRetrieve: .success(.none))
     }
     
     func test_storeSideEffects_runSerially() {

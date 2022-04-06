@@ -57,10 +57,10 @@ class NewsStoreSpy: NewsStore {
     }
     
     func completeRetrievalWithEmptyCache(at index: Int = 0) {
-        retrievalCompletions[index](.success(.empty))
+        retrievalCompletions[index](.success(.none))
     }
     
     func completeRetrieval(with news: [LocalNewsItem], timestamp: Date, at index: Int = 0) {
-        retrievalCompletions[index](.success(.found(news: news, timestamp: timestamp)))
+        retrievalCompletions[index](.success(.some(CachedNews(news: news, timestamp: timestamp))))
     }
 }

@@ -18,6 +18,6 @@ extension FailableInsertNewsStoreSpecs where Self: XCTestCase {
     func assertThatInsertHasNoSideEffectsOnInsertionError(on sut: NewsStore, file: StaticString = #file, line: UInt = #line) {
         insert((uniqueNews().local, Date()), to: sut)
 
-        expect(sut, toRetrieve: .success(.empty), file: file, line: line)
+        expect(sut, toRetrieve: .success(.none), file: file, line: line)
     }
 }

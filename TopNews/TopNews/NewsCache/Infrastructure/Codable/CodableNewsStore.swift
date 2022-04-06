@@ -55,13 +55,13 @@ public final class CodableNewsStore: NewsStore {
         let storeURL = self.storeURL
         queue.async {
             guard let data = try? Data(contentsOf: storeURL) else {
-                return completion(.success(.empty))
+                return completion(.success(.none))
             }
             
             do {
                 let decoder = JSONDecoder()
                 let cache = try decoder.decode(Cache.self, from: data)
-                completion(.success(.found(news: cache.localNews, timestamp: cache.timestamp)))
+                completion(.success(CachedNews(news: cache.localNews, timestamp: cache.timestamp)))
             } catch {
                 completion(.failure(error))
             }
