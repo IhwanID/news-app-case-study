@@ -10,8 +10,13 @@ import Foundation
 public typealias CachedNews = (news: [LocalNewsItem], timestamp: Date)
 
 public protocol NewsStore {
-    typealias DeletionCompletion = (LocalNewsLoader.SaveResult) -> Void
-    typealias InsertionCompletion = (LocalNewsLoader.SaveResult) -> Void
+    typealias DeletionResult = Error?
+    typealias DeletionCompletion = (DeletionResult) -> Void
+    
+    
+    typealias InsertionResult = Error?
+    typealias InsertionCompletion = (InsertionResult) -> Void
+    
     typealias RetrievalResult = Swift.Result<CachedNews?, Error>
     typealias RetrievalCompletion = (RetrievalResult) -> Void
     
