@@ -32,12 +32,7 @@ class TopNewsCacheIntegrationTests: XCTestCase {
         let sutToPerformLoad = makeSUT()
         let news = uniqueNews().models
         
-        let saveExp = expectation(description: "Wait for save completion")
-        sutToPerformSave.save(news) { saveError in
-            XCTAssertNil(saveError, "Expected to save news successfully")
-            saveExp.fulfill()
-        }
-        wait(for: [saveExp], timeout: 1.0)
+        save(news, with: sutToPerformSave)
         
         expect(sutToPerformLoad, toLoad: news)
     }
@@ -49,20 +44,8 @@ class TopNewsCacheIntegrationTests: XCTestCase {
         let firstNews = uniqueNews().models
         let latestNews = uniqueNews().models
         
-        let saveExp1 = expectation(description: "Wait for save completion")
-        sutToPerformFirstSave.save(firstNews) { saveError in
-            XCTAssertNil(saveError, "Expected to save news successfully")
-            saveExp1.fulfill()
-        }
-        wait(for: [saveExp1], timeout: 1.0)
-        
-        let saveExp2 = expectation(description: "Wait for save completion")
-        sutToPerformLastSave.save(latestNews) { saveError in
-            XCTAssertNil(saveError, "Expected to save news successfully")
-            saveExp2.fulfill()
-        }
-        wait(for: [saveExp2], timeout: 1.0)
-        
+        save(firstNews, with: sutToPerformFirstSave)
+        save(latestNews, with: sutToPerformLastSave)
         expect(sutToPerformLoad, toLoad: latestNews)
     }
     
@@ -92,6 +75,15 @@ class TopNewsCacheIntegrationTests: XCTestCase {
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func save(_ news: [NewsItem], with loader: LocalNewsLoader, file: StaticString = #file, line: UInt = #line) {
+        let saveExp = expectation(description: "Wait for save completion")
+        loader.save(news) { saveError in
+            XCTAssertNil(saveError, "Expected to save news successfully", file: file, line: line)
+            saveExp.fulfill()
+        }
+        wait(for: [saveExp], timeout: 1.0)
     }
     
     private func setupEmptyStoreState() {
