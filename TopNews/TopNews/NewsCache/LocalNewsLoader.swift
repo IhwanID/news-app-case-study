@@ -22,7 +22,7 @@ public class LocalNewsLoader {
 extension LocalNewsLoader {
     public typealias SaveResult = Error?
     
-    func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
+    public func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
         store.deleteCachedNews{ [weak self] error in
             guard let self = self else { return }
             
