@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CodableNewsStore: NewsStore {
+public final class CodableNewsStore: NewsStore {
     
     private struct Cache: Codable {
         let news: [CodableNewsItem]
@@ -51,7 +51,7 @@ class CodableNewsStore: NewsStore {
         self.storeURL = storeURL
     }
     
-    func retrieve(completion: @escaping RetrievalCompletion) {
+    public func retrieve(completion: @escaping RetrievalCompletion) {
         let storeURL = self.storeURL
         queue.async {
             guard let data = try? Data(contentsOf: storeURL) else {
@@ -68,7 +68,7 @@ class CodableNewsStore: NewsStore {
         }
     }
     
-    func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
+    public func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         let storeURL = self.storeURL
         queue.async(flags: .barrier) {
             do {
@@ -83,7 +83,7 @@ class CodableNewsStore: NewsStore {
         }
     }
     
-    func deleteCachedNews(completion: @escaping DeletionCompletion) {
+    public func deleteCachedNews(completion: @escaping DeletionCompletion) {
         let storeURL = self.storeURL
         queue.async(flags: .barrier) {
             guard FileManager.default.fileExists(atPath: storeURL.path) else {
