@@ -8,16 +8,16 @@
 import CoreData
 
 @objc(ManagedNewsItem)
-internal class ManagedNewsItem: NSManagedObject {
-    @NSManaged internal var title: String
-    @NSManaged internal var author: String?
-    @NSManaged internal var source: String
-    @NSManaged internal var newsDescription: String
-    @NSManaged internal var content: String?
-    @NSManaged internal var newsURL: URL
-    @NSManaged internal var imageURL: URL?
-    @NSManaged internal var publishedAt: Date
-    @NSManaged internal var cache: ManagedCache
+class ManagedNewsItem: NSManagedObject {
+    @NSManaged var title: String
+    @NSManaged var author: String?
+    @NSManaged var source: String
+    @NSManaged var newsDescription: String
+    @NSManaged var content: String?
+    @NSManaged var newsURL: URL
+    @NSManaged var imageURL: URL?
+    @NSManaged var publishedAt: Date
+    @NSManaged var cache: ManagedCache
 }
 
 extension ManagedNewsItem {

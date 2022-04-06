@@ -79,8 +79,11 @@ class TopNewsCacheIntegrationTests: XCTestCase {
     
     private func save(_ news: [NewsItem], with loader: LocalNewsLoader, file: StaticString = #file, line: UInt = #line) {
         let saveExp = expectation(description: "Wait for save completion")
-        loader.save(news) { saveError in
-            XCTAssertNil(saveError, "Expected to save news successfully", file: file, line: line)
+        loader.save(news) { result in
+            if case let Result.failure(error) = result {
+                XCTAssertNil(error, "Expected to save news successfully", file: file, line: line)
+            }
+            
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1.0)

@@ -16,7 +16,7 @@ class RemoteNewsLoader: NewsLoader {
         case invalidData
     }
     
-    public typealias Result = LoadNewsResult
+    public typealias Result = NewsLoader.Result
     
     
     init(url: URL, client: HTTPClient) {
@@ -29,7 +29,7 @@ class RemoteNewsLoader: NewsLoader {
             guard self != nil else { return }
             
             switch result {
-            case let .success(data, response):
+            case let .success((data, response)):
                 completion(RemoteNewsLoader.map(data, from: response))
             case .failure:
                 completion(.failure(Error.connectivity))

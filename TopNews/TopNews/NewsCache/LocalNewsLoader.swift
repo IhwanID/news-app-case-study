@@ -20,30 +20,32 @@ public class LocalNewsLoader {
 }
 
 extension LocalNewsLoader {
-    public typealias SaveResult = Error?
+    public typealias SaveResult = Result<Void, Error>
     
     public func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
-        store.deleteCachedNews{ [weak self] error in
+        store.deleteCachedNews{ [weak self] deletionResult in
             guard let self = self else { return }
             
-            if let cacheDeletionError = error {
-                completion(cacheDeletionError)
-            } else {
+            switch deletionResult {
+            case .success:
                 self.cache(items, with: completion)
+            case let .failure(error):
+                completion(.failure(error))
             }
+            
         }
     }
     
     private func cache(_ items: [NewsItem], with completion: @escaping (SaveResult) -> Void){
-        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] error in
+        self.store.insert(items.toLocal(), timestamp: self.currentDate()){ [weak self] insertionResult in
             guard self != nil else { return }
-            completion(error)
+            completion(insertionResult)
         }
     }
 }
 
 extension LocalNewsLoader: NewsLoader {
-    public typealias LoadResult = LoadNewsResult
+    public typealias LoadResult = NewsLoader.Result
     
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
@@ -51,9 +53,9 @@ extension LocalNewsLoader: NewsLoader {
             switch result {
             case let .failure(error):
                 completion(.failure(error))
-            case let .found(news, timestamp) where NewsCachePolicy.validate(timestamp, against: self.currentDate()):
-                completion(.success(news.toModels()))
-            case .found, .empty:
+            case let .success(.some(cache)) where NewsCachePolicy.validate(cache.timestamp, against: self.currentDate()):
+                completion(.success(cache.news.toModels()))
+            case .success:
                 completion(.success([]))
             }
         }
@@ -68,9 +70,10 @@ extension LocalNewsLoader {
             switch result {
             case .failure:
                 self.store.deleteCachedNews { _ in }
-            case let .found(_, timestamp) where !NewsCachePolicy.validate(timestamp, against: self.currentDate()):
+            case let .success(.some(cache)) where !NewsCachePolicy.validate(cache.timestamp, against: self.currentDate()):
                 self.store.deleteCachedNews { _ in }
-            case .empty, .found: break
+            case .success:
+                break
             }
         }
     }
