@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CodableNewsStore: NewsStore {
+public final class CodableNewsStore: NewsStore {
     
     private struct Cache: Codable {
         let news: [CodableNewsItem]
