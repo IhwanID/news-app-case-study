@@ -18,44 +18,30 @@ public final class CoreDataNewsStore: NewsStore {
     
     public func retrieve(completion: @escaping RetrievalCompletion) {
         perform { context in
-            do {
-                
-                if let cache = try ManagedCache.find(in: context)  {
-                    completion(.success(CachedNews(
-                        news: cache.localNews,
-                        timestamp: cache.timestamp)))
-                } else {
-                    completion(.success(.none))
-                }
-            } catch {
-                completion(.failure(error))
-            }
+            completion(Result {
+                try ManagedCache.find(in: context).map {
+                    return CachedNews(news: $0.localNews, timestamp: $0.timestamp)
+                }})
         }
     }
     
     public func insert(_ news: [LocalNewsItem], timestamp: Date, completion: @escaping InsertionCompletion) {
         perform { context in
-            do {
+            completion(Result {
                 let managedCache = try ManagedCache.newUniqueInstance(in: context)
                 managedCache.timestamp = timestamp
                 managedCache.news = ManagedNewsItem.item(from: news, in: context)
                 
                 try context.save()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+            })
         }
     }
     
     public func deleteCachedNews(completion: @escaping DeletionCompletion) {
         perform { context in
-            do {
+            completion(Result {
                 try ManagedCache.find(in: context).map(context.delete).map(context.save)
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+            })
         }
     }
     
