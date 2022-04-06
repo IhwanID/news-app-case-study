@@ -8,9 +8,9 @@
 import CoreData
 
 @objc(ManagedCache)
-internal class ManagedCache: NSManagedObject {
-    @NSManaged internal var timestamp: Date
-    @NSManaged internal var news: NSOrderedSet
+class ManagedCache: NSManagedObject {
+    @NSManaged var timestamp: Date
+    @NSManaged var news: NSOrderedSet
 }
 
 extension ManagedCache {

@@ -7,17 +7,17 @@
 
 import Foundation
 
-internal struct RemoteNewsItem: Decodable {
-    internal let title: String
-    internal let author: String?
-    internal let source: Source
-    internal let description: String
-    internal let content: String?
-    internal let url: URL
-    internal let urlToImage: URL?
-    internal let publishedAt: Date
+struct RemoteNewsItem: Decodable {
+    let title: String
+    let author: String?
+    let source: Source
+    let description: String
+    let content: String?
+    let url: URL
+    let urlToImage: URL?
+    let publishedAt: Date
 }
 
-internal struct Source: Decodable {
-    internal let name: String
+struct Source: Decodable {
+    let name: String
 }
