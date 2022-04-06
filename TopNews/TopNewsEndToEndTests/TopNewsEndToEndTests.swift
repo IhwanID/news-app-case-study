@@ -25,7 +25,7 @@ class TopNewsEndToEndTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func getNewsResult(file: StaticString = #file, line: UInt = #line) -> LoadNewsResult? {
+    private func getNewsResult(file: StaticString = #file, line: UInt = #line) -> NewsLoader.Result? {
         let testServerURL = URL(string: "https://gist.githubusercontent.com/IhwanID/8f720a52f2afbc5ba4b92571274357ba/raw/7c63b66855327bc64e5cb81b21e2d18e8a6c7853/news.json")!
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let loader = RemoteNewsLoader(url: testServerURL, client: client)
@@ -34,7 +34,7 @@ class TopNewsEndToEndTests: XCTestCase {
         
         let exp = expectation(description: "Wait for load completion")
         
-        var receivedResult: LoadNewsResult?
+        var receivedResult: NewsLoader.Result?
         loader.load { result in
             receivedResult = result
             exp.fulfill()

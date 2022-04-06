@@ -16,7 +16,7 @@ class RemoteNewsLoader: NewsLoader {
         case invalidData
     }
     
-    public typealias Result = LoadNewsResult
+    public typealias Result = NewsLoader.Result
     
     
     init(url: URL, client: HTTPClient) {
