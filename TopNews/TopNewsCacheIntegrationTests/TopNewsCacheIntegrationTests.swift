@@ -24,7 +24,7 @@ class TopNewsCacheIntegrationTests: XCTestCase {
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
         
-       expect(sut, toLoad: [])
+        expect(sut, toLoad: [])
     }
     
     func test_load_deliversItemsSavedOnASeparateInstance() {
@@ -40,6 +40,30 @@ class TopNewsCacheIntegrationTests: XCTestCase {
         wait(for: [saveExp], timeout: 1.0)
         
         expect(sutToPerformLoad, toLoad: news)
+    }
+    
+    func test_save_overridesItemsSavedOnASeparateInstance() {
+        let sutToPerformFirstSave = makeSUT()
+        let sutToPerformLastSave = makeSUT()
+        let sutToPerformLoad = makeSUT()
+        let firstNews = uniqueNews().models
+        let latestNews = uniqueNews().models
+        
+        let saveExp1 = expectation(description: "Wait for save completion")
+        sutToPerformFirstSave.save(firstNews) { saveError in
+            XCTAssertNil(saveError, "Expected to save news successfully")
+            saveExp1.fulfill()
+        }
+        wait(for: [saveExp1], timeout: 1.0)
+        
+        let saveExp2 = expectation(description: "Wait for save completion")
+        sutToPerformLastSave.save(latestNews) { saveError in
+            XCTAssertNil(saveError, "Expected to save news successfully")
+            saveExp2.fulfill()
+        }
+        wait(for: [saveExp2], timeout: 1.0)
+        
+        expect(sutToPerformLoad, toLoad: latestNews)
     }
     
     // MARK: Helpers
