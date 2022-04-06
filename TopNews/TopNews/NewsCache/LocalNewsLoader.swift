@@ -12,7 +12,7 @@ public class LocalNewsLoader {
     private let store: NewsStore
     private let currentDate: () -> Date
     
-    init(store: NewsStore, currentDate: @escaping () -> Date) {
+    public init(store: NewsStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
