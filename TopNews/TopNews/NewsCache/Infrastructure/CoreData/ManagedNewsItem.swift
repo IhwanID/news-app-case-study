@@ -18,7 +18,9 @@ internal class ManagedNewsItem: NSManagedObject {
     @NSManaged internal var imageURL: URL?
     @NSManaged internal var publishedAt: Date
     @NSManaged internal var cache: ManagedCache
-    
+}
+
+extension ManagedNewsItem {
     static func item(from localNews: [LocalNewsItem], in context: NSManagedObjectContext) -> NSOrderedSet {
         return NSOrderedSet(array: localNews.map { local in
             let managed = ManagedNewsItem(context: context)
