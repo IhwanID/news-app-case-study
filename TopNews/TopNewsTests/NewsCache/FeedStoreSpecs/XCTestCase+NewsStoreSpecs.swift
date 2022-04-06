@@ -122,8 +122,8 @@ extension NewsStoreSpecs where Self: XCTestCase {
     func insert(_ cache: (news: [LocalNewsItem], timestamp: Date), to sut: NewsStore) -> Error? {
         let exp = expectation(description: "Wait for cache insertion")
         var insertionError: Error?
-        sut.insert(cache.news, timestamp: cache.timestamp) { receivedInsertionError in
-            insertionError = receivedInsertionError
+        sut.insert(cache.news, timestamp: cache.timestamp) { result in
+            if case let Result.failure(error) = result { insertionError = error }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
@@ -135,8 +135,8 @@ extension NewsStoreSpecs where Self: XCTestCase {
     func deleteCache(from sut: NewsStore) -> Error? {
         let exp = expectation(description: "Wait for cache deletion")
         var deletionError: Error?
-        sut.deleteCachedNews { receivedDeletionError in
-            deletionError = receivedDeletionError
+        sut.deleteCachedNews { result in
+            if case let Result.failure(error) = result { deletionError = error }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)

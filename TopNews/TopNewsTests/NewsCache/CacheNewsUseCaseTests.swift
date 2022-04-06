@@ -77,7 +77,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         let store = NewsStoreSpy()
         var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalNewsLoader.SaveResult]()
         sut?.save(uniqueNews().models) { receivedResults.append($0) }
         
         sut = nil
@@ -90,7 +90,7 @@ class CacheNewsUseCaseTests: XCTestCase {
         let store = NewsStoreSpy()
         var sut: LocalNewsLoader? = LocalNewsLoader(store: store, currentDate: Date.init)
         
-        var receivedResults = [Error?]()
+        var receivedResults = [LocalNewsLoader.SaveResult]()
         sut?.save(uniqueNews().models) { receivedResults.append($0) }
         
         store.completeDeletionSuccessfully()
@@ -113,8 +113,11 @@ class CacheNewsUseCaseTests: XCTestCase {
         let exp = expectation(description: "Wait for save completion")
         
         var receivedError: Error?
-        sut.save(uniqueNews().models) { error in
-            receivedError = error
+        sut.save(uniqueNews().models) { result in
+            if case let Result.failure(error) = result {
+                receivedError = error
+                
+            }
             exp.fulfill()
         }
         

@@ -41,9 +41,9 @@ public final class CoreDataNewsStore: NewsStore {
                 managedCache.news = ManagedNewsItem.item(from: news, in: context)
                 
                 try context.save()
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
@@ -52,9 +52,9 @@ public final class CoreDataNewsStore: NewsStore {
         perform { context in
             do {
                 try ManagedCache.find(in: context).map(context.delete).map(context.save)
-                completion(nil)
+                completion(.success(()))
             } catch {
-                completion(error)
+                completion(.failure(error))
             }
         }
     }
