@@ -12,7 +12,7 @@ public class LocalNewsLoader {
     private let store: NewsStore
     private let currentDate: () -> Date
     
-    init(store: NewsStore, currentDate: @escaping () -> Date) {
+    public init(store: NewsStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
@@ -22,7 +22,7 @@ public class LocalNewsLoader {
 extension LocalNewsLoader {
     public typealias SaveResult = Error?
     
-    func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
+    public func save(_ items: [NewsItem], completion: @escaping (SaveResult) -> Void = { _ in }) {
         store.deleteCachedNews{ [weak self] error in
             guard let self = self else { return }
             

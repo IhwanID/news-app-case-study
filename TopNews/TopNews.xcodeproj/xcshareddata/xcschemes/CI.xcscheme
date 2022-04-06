@@ -60,6 +60,16 @@
                ReferencedContainer = "container:TopNews.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "60BAAC1527FD545A00FF035F"
+               BuildableName = "TopNewsCacheIntegrationTests.xctest"
+               BlueprintName = "TopNewsCacheIntegrationTests"
+               ReferencedContainer = "container:TopNews.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
