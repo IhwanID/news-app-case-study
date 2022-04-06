@@ -51,9 +51,9 @@ extension LocalNewsLoader: NewsLoader {
             switch result {
             case let .failure(error):
                 completion(.failure(error))
-            case let .found(news, timestamp) where NewsCachePolicy.validate(timestamp, against: self.currentDate()):
+            case let .success(.found(news, timestamp)) where NewsCachePolicy.validate(timestamp, against: self.currentDate()):
                 completion(.success(news.toModels()))
-            case .found, .empty:
+            case .success:
                 completion(.success([]))
             }
         }
@@ -68,9 +68,10 @@ extension LocalNewsLoader {
             switch result {
             case .failure:
                 self.store.deleteCachedNews { _ in }
-            case let .found(_, timestamp) where !NewsCachePolicy.validate(timestamp, against: self.currentDate()):
+            case let .success(.found(_, timestamp)) where !NewsCachePolicy.validate(timestamp, against: self.currentDate()):
                 self.store.deleteCachedNews { _ in }
-            case .empty, .found: break
+            case .success:
+                break
             }
         }
     }
