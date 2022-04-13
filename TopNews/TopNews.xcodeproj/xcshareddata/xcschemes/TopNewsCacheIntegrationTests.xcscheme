@@ -5,22 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "60069DBA27D4AC630036C308"
-               BuildableName = "TopNews.framework"
-               BlueprintName = "TopNews"
-               ReferencedContainer = "container:TopNews.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -40,12 +24,13 @@
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "60069DC227D4AC640036C308"
-               BuildableName = "TopNewsTests.xctest"
-               BlueprintName = "TopNewsTests"
+               BlueprintIdentifier = "60BAAC1527FD545A00FF035F"
+               BuildableName = "TopNewsCacheIntegrationTests.xctest"
+               BlueprintName = "TopNewsCacheIntegrationTests"
                ReferencedContainer = "container:TopNews.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -68,15 +53,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "60069DBA27D4AC630036C308"
-            BuildableName = "TopNews.framework"
-            BlueprintName = "TopNews"
-            ReferencedContainer = "container:TopNews.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

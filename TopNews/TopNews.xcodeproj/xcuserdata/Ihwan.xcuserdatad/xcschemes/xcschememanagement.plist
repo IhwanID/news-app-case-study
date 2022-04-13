@@ -17,7 +17,7 @@
 		<key>TopNewsCacheIntegrationTests.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<key>TopNewsEndToEndTests.xcscheme_^#shared#^_</key>
 		<dict>
@@ -38,6 +38,11 @@
 			<true/>
 		</dict>
 		<key>60752AA627D7962E004B3921</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60BAAC1527FD545A00FF035F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
