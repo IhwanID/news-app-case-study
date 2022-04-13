@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "60069DBA27D4AC630036C308"
-               BuildableName = "TopNews.framework"
-               BlueprintName = "TopNews"
+               BlueprintIdentifier = "6043C5CA2807368D00FD767E"
+               BuildableName = "TopNewsiOS.framework"
+               BlueprintName = "TopNewsiOS"
                ReferencedContainer = "container:TopNews.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,20 +32,21 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "60069DBA27D4AC630036C308"
-            BuildableName = "TopNews.framework"
-            BlueprintName = "TopNews"
+            BlueprintIdentifier = "6043C5CA2807368D00FD767E"
+            BuildableName = "TopNewsiOS.framework"
+            BlueprintName = "TopNewsiOS"
             ReferencedContainer = "container:TopNews.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "60069DC227D4AC640036C308"
-               BuildableName = "TopNewsTests.xctest"
-               BlueprintName = "TopNewsTests"
+               BlueprintIdentifier = "6043C5D12807368D00FD767E"
+               BuildableName = "TopNewsiOSTests.xctest"
+               BlueprintName = "TopNewsiOSTests"
                ReferencedContainer = "container:TopNews.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -71,9 +72,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "60069DBA27D4AC630036C308"
-            BuildableName = "TopNews.framework"
-            BlueprintName = "TopNews"
+            BlueprintIdentifier = "6043C5CA2807368D00FD767E"
+            BuildableName = "TopNewsiOS.framework"
+            BlueprintName = "TopNewsiOS"
             ReferencedContainer = "container:TopNews.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -4,10 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>CI.xcscheme_^#shared#^_</key>
+		<key>CI_MacOS.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+		<key>CI_iOS.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>TopNews.xcscheme_^#shared#^_</key>
 		<dict>
@@ -17,12 +22,17 @@
 		<key>TopNewsCacheIntegrationTests.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<key>TopNewsEndToEndTests.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>4</integer>
+		</dict>
+		<key>TopNewsiOS.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -33,6 +43,26 @@
 			<true/>
 		</dict>
 		<key>60069DC227D4AC640036C308</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6043C5CA2807368D00FD767E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6043C5D12807368D00FD767E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60752AA627D7962E004B3921</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>60BAAC1527FD545A00FF035F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
