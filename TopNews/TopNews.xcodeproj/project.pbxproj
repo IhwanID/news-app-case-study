@@ -20,6 +20,7 @@
 		6048250C27D631F9000CED82 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6048250B27D631F9000CED82 /* URLSessionHTTPClientTests.swift */; };
 		6048EB13280785A50038B4D2 /* NewsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6048EB12280785A50038B4D2 /* NewsViewControllerTests.swift */; };
 		6048EB142807895F0038B4D2 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60752AA127D78A13004B3921 /* XCTestCase+MemoryLeakTracking.swift */; };
+		6048EB16280791040038B4D2 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6048EB15280791040038B4D2 /* NewsViewController.swift */; };
 		604F9EB227FB9FEB006B02BF /* CoreDataNewsStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB127FB9FEB006B02BF /* CoreDataNewsStoreTest.swift */; };
 		604F9EB427FBA0A2006B02BF /* CoreDataNewsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB327FBA0A2006B02BF /* CoreDataNewsStore.swift */; };
 		604F9EB727FBA18F006B02BF /* NewsStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB527FBA18F006B02BF /* NewsStore.xcdatamodeld */; };
@@ -101,6 +102,7 @@
 		6044173E27D5132100FECBD7 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		6048250B27D631F9000CED82 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		6048EB12280785A50038B4D2 /* NewsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewControllerTests.swift; sourceTree = "<group>"; };
+		6048EB15280791040038B4D2 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		604F9EB127FB9FEB006B02BF /* CoreDataNewsStoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataNewsStoreTest.swift; sourceTree = "<group>"; };
 		604F9EB327FBA0A2006B02BF /* CoreDataNewsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataNewsStore.swift; sourceTree = "<group>"; };
 		604F9EB627FBA18F006B02BF /* NewsStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewsStore.xcdatamodel; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		6043C5CC2807368D00FD767E /* TopNewsiOS */ = {
 			isa = PBXGroup;
 			children = (
+				6048EB15280791040038B4D2 /* NewsViewController.swift */,
 			);
 			path = TopNewsiOS;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 					};
 					6043C5CA2807368D00FD767E = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
 					};
 					6043C5D12807368D00FD767E = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -648,6 +652,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6048EB16280791040038B4D2 /* NewsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -921,6 +926,7 @@
 		6043C5DB2807368D00FD767E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -942,6 +948,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -950,6 +957,7 @@
 		6043C5DC2807368D00FD767E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -980,6 +988,7 @@
 		6043C5DE2807368D00FD767E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1004,6 +1013,7 @@
 		6043C5DF2807368D00FD767E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
