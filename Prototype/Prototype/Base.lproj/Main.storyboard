@@ -119,6 +119,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="authorLabel" destination="3Nt-HT-tgb" id="bBC-ci-zDh"/>
+                                    <outlet property="newsImageContainer" destination="i3d-4N-JOT" id="aFc-vL-gQK"/>
                                     <outlet property="newsImageView" destination="EQc-Kh-hcq" id="mUR-Lj-xLp"/>
                                     <outlet property="sourceLabel" destination="ocJ-uc-3bi" id="RK0-su-rX4"/>
                                     <outlet property="titleLabel" destination="v6d-ia-Zey" id="iSt-jQ-6cq"/>
