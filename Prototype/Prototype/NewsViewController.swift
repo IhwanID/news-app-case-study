@@ -57,6 +57,6 @@ extension NewsItemCell {
         sourceLabel.text = model.source
         titleLabel.text = model.title
 
-        newsImageView.image = UIImage(named: model.imageName)
+        fadeIn(UIImage(named: model.imageName))
     }
 }
