@@ -50,14 +50,14 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
-    func test_pullToRefresh_loadsNews() {
+    func test_userInitiatedNewsReload_reloadsNews() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(loader.loadCallCount, 2)
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedFeedReload()
         XCTAssertEqual(loader.loadCallCount, 3)
     }
     
@@ -78,22 +78,22 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
     }
     
-    func test_pullToRefresh_showsLoadingIndicator() {
+    func test_userInitiatedNewsReload_showsLoadingIndicator() {
         let (sut, _) = makeSUT()
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedFeedReload()
         
         XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
-    func test_pullToRefresh_hidesLoadingIndicatorOnLoaderCompletion() {
-            let (sut, loader) = makeSUT()
-
-            sut.refreshControl?.simulatePullToRefresh()
-            loader.completeNewsLoading()
-
-            XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
-        }
+    func test_userInitiatedNewsReload_hidesLoadingIndicatorOnLoaderCompletion() {
+        let (sut, loader) = makeSUT()
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeNewsLoading()
+        
+        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+    }
     
     // MARK: - Helpers
     
@@ -123,6 +123,11 @@ class NewsViewControllerTests: XCTestCase {
     
 }
 
+private extension NewsViewController {
+    func simulateUserInitiatedFeedReload() {
+        refreshControl?.simulatePullToRefresh()
+    }
+}
 
 extension UIRefreshControl {
     func simulatePullToRefresh() {
