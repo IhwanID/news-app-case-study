@@ -21,12 +21,12 @@ final class NewsViewController: UITableViewController {
         super.viewDidLoad()
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
-        refreshControl?.beginRefreshing()
         load()
         
     }
     
     @objc private func load() {
+        refreshControl?.beginRefreshing()
         loader?.load { [weak self] _ in
             self?.refreshControl?.endRefreshing()
         }
@@ -35,64 +35,40 @@ final class NewsViewController: UITableViewController {
 
 class NewsViewControllerTests: XCTestCase {
     
-    func test_init_doesNotLoadNews() {
-        let (_, loader) = makeSUT()
-        _ = NewsViewController(loader: loader)
-        
-        XCTAssertEqual(loader.loadCallCount, 0)
-    }
-    
-    func test_viewDidLoad_loadsNews() {
+    func test_loadNewsActions_requestNewsFromLoader() {
         let (sut, loader) = makeSUT()
+        
+        XCTAssertEqual(loader.loadCallCount, 0, "Expected no loading requests before view is loaded")
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(loader.loadCallCount, 1)
-    }
-    
-    func test_userInitiatedNewsReload_reloadsNews() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        
-        sut.simulateUserInitiatedFeedReload()
-        XCTAssertEqual(loader.loadCallCount, 2)
-        
-        sut.simulateUserInitiatedFeedReload()
-        XCTAssertEqual(loader.loadCallCount, 3)
-    }
-    
-    func test_viewDidLoad_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
+        XCTAssertEqual(loader.loadCallCount, 1, "Expected a loading request once view is loaded")
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
+        sut.simulateUserInitiatedNewsReload()
+        XCTAssertEqual(loader.loadCallCount, 2, "Expected another loading request once user initiates a reload")
+        
+        sut.simulateUserInitiatedNewsReload()
+        XCTAssertEqual(loader.loadCallCount, 3, "Expected yet another loading request once user initiates another reload")
     }
     
-    func test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion() {
+    
+    
+    func test_loadingNewsIndicator_isVisibleWhileLoadingNews() {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        loader.completeNewsLoading()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
         
-        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
-    }
-    
-    func test_userInitiatedNewsReload_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
+        loader.completeNewsLoading(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading is completed")
         
-        sut.simulateUserInitiatedFeedReload()
+        sut.simulateUserInitiatedNewsReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a reload")
         
-        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
-    }
-    
-    func test_userInitiatedNewsReload_hidesLoadingIndicatorOnLoaderCompletion() {
-        let (sut, loader) = makeSUT()
-        
-        sut.simulateUserInitiatedFeedReload()
-        loader.completeNewsLoading()
-        
-        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
+        loader.completeNewsLoading(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated loading is completed")
     }
     
     // MARK: - Helpers
@@ -116,15 +92,15 @@ class NewsViewControllerTests: XCTestCase {
             completions.append(completion)
         }
         
-        func completeNewsLoading() {
-            completions[0](.success([]))
+        func completeNewsLoading(at index: Int) {
+            completions[index](.success([]))
         }
     }
     
 }
 
 private extension NewsViewController {
-    func simulateUserInitiatedFeedReload() {
+    func simulateUserInitiatedNewsReload() {
         refreshControl?.simulatePullToRefresh()
     }
     
