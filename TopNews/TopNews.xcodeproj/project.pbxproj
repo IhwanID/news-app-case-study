@@ -18,6 +18,7 @@
 		6044173D27D5116900FECBD7 /* NewsItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044173C27D5116900FECBD7 /* NewsItemMapper.swift */; };
 		6044173F27D5132100FECBD7 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044173E27D5132100FECBD7 /* HTTPClient.swift */; };
 		6048250C27D631F9000CED82 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6048250B27D631F9000CED82 /* URLSessionHTTPClientTests.swift */; };
+		6048EB13280785A50038B4D2 /* NewsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6048EB12280785A50038B4D2 /* NewsViewControllerTests.swift */; };
 		604F9EB227FB9FEB006B02BF /* CoreDataNewsStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB127FB9FEB006B02BF /* CoreDataNewsStoreTest.swift */; };
 		604F9EB427FBA0A2006B02BF /* CoreDataNewsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB327FBA0A2006B02BF /* CoreDataNewsStore.swift */; };
 		604F9EB727FBA18F006B02BF /* NewsStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 604F9EB527FBA18F006B02BF /* NewsStore.xcdatamodeld */; };
@@ -98,6 +99,7 @@
 		6044173C27D5116900FECBD7 /* NewsItemMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemMapper.swift; sourceTree = "<group>"; };
 		6044173E27D5132100FECBD7 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		6048250B27D631F9000CED82 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
+		6048EB12280785A50038B4D2 /* NewsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewControllerTests.swift; sourceTree = "<group>"; };
 		604F9EB127FB9FEB006B02BF /* CoreDataNewsStoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataNewsStoreTest.swift; sourceTree = "<group>"; };
 		604F9EB327FBA0A2006B02BF /* CoreDataNewsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataNewsStore.swift; sourceTree = "<group>"; };
 		604F9EB627FBA18F006B02BF /* NewsStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewsStore.xcdatamodel; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 		6043C5D62807368D00FD767E /* TopNewsiOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				6048EB12280785A50038B4D2 /* NewsViewControllerTests.swift */,
 			);
 			path = TopNewsiOSTests;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 					};
 					6043C5D12807368D00FD767E = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
 					};
 					60752AA627D7962E004B3921 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -650,6 +654,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6048EB13280785A50038B4D2 /* NewsViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,15 +978,22 @@
 		6043C5DE2807368D00FD767E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = id.ihwan.TopNewsiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -990,10 +1002,16 @@
 		6043C5DF2807368D00FD767E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = id.ihwan.TopNewsiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
