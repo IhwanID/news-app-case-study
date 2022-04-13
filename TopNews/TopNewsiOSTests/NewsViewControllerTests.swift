@@ -66,7 +66,7 @@ class NewsViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
+        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
     }
     
     func test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion() {
@@ -75,7 +75,7 @@ class NewsViewControllerTests: XCTestCase {
         sut.loadViewIfNeeded()
         loader.completeNewsLoading()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
     }
     
     func test_userInitiatedNewsReload_showsLoadingIndicator() {
@@ -83,7 +83,7 @@ class NewsViewControllerTests: XCTestCase {
         
         sut.simulateUserInitiatedFeedReload()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
+        XCTAssertEqual(sut.isShowingLoadingIndicator, true)
     }
     
     func test_userInitiatedNewsReload_hidesLoadingIndicatorOnLoaderCompletion() {
@@ -92,7 +92,7 @@ class NewsViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedFeedReload()
         loader.completeNewsLoading()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+        XCTAssertEqual(sut.isShowingLoadingIndicator, false)
     }
     
     // MARK: - Helpers
@@ -126,6 +126,10 @@ class NewsViewControllerTests: XCTestCase {
 private extension NewsViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    var isShowingLoadingIndicator: Bool {
+        return refreshControl?.isRefreshing == true
     }
 }
 
