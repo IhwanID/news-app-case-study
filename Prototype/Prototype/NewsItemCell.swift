@@ -38,3 +38,15 @@ class NewsItemCell: UITableViewCell {
     }
     
 }
+
+extension NewsItemCell {
+    func configure(with model: NewsItemViewModel) {
+        authorLabel.text = model.author
+        authorLabel.isHidden = model.author == nil
+        
+        sourceLabel.text = model.source
+        titleLabel.text = model.title
+        
+        fadeIn(UIImage(named: model.imageName))
+    }
+}

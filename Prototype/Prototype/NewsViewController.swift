@@ -7,34 +7,9 @@
 
 import UIKit
 
-struct NewsItemViewModel {
-    let author: String?
-    let source: String
-    let imageName: String
-    let title: String
-}
-
-extension NewsItemViewModel {
-    static var prototypeNews: [NewsItemViewModel] {
-            return [
-                NewsItemViewModel(author: "Budi", source: "CNN", imageName: "image-1", title: "Contoh Berita 1"),
-                NewsItemViewModel(author: nil, source: "CNN", imageName: "image-1", title: "Contoh Berita 1"),
-                NewsItemViewModel(author: "Budi", source: "CNN", imageName: "image-1", title: "Contoh Berita 1"),
-                NewsItemViewModel(author: "Budi", source: "CNN", imageName: "image-1", title: "Contoh Berita 1"),
-                NewsItemViewModel(author: "Budi", source: "CNN", imageName: "image-1", title: "Contoh Berita 1"),
-                NewsItemViewModel(author: "Budi", source: "CNN", imageName: "image-1", title: "Contoh Berita 1")
-            ]
-    }
-}
-
 final class NewsViewController: UITableViewController {
     
     private let news = NewsItemViewModel.prototypeNews
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell =  tableView.dequeueReusableCell(withIdentifier: "NewsItemCell", for: indexPath) as! NewsItemCell
@@ -47,16 +22,4 @@ final class NewsViewController: UITableViewController {
         return news.count
     }
     
-}
-
-extension NewsItemCell {
-    func configure(with model: NewsItemViewModel) {
-        authorLabel.text = model.author
-        authorLabel.isHidden = model.author == nil
-
-        sourceLabel.text = model.source
-        titleLabel.text = model.title
-
-        fadeIn(UIImage(named: model.imageName))
-    }
 }

@@ -14,6 +14,7 @@
 		6043C5B9280722B600FD767E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6043C5B7280722B600FD767E /* LaunchScreen.storyboard */; };
 		6043C5C12807235E00FD767E /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043C5C02807235E00FD767E /* NewsViewController.swift */; };
 		6043C5C328072EC900FD767E /* NewsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043C5C228072EC900FD767E /* NewsItemCell.swift */; };
+		6043C5C52807315600FD767E /* NewsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043C5C42807315600FD767E /* NewsItemViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		6043C5BA280722B600FD767E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6043C5C02807235E00FD767E /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		6043C5C228072EC900FD767E /* NewsItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemCell.swift; sourceTree = "<group>"; };
+		6043C5C42807315600FD767E /* NewsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				6043C5AC280722B500FD767E /* AppDelegate.swift */,
 				6043C5AE280722B500FD767E /* SceneDelegate.swift */,
 				6043C5C02807235E00FD767E /* NewsViewController.swift */,
+				6043C5C42807315600FD767E /* NewsItemViewModel.swift */,
 				6043C5C228072EC900FD767E /* NewsItemCell.swift */,
 				6043C5B2280722B500FD767E /* Main.storyboard */,
 				6043C5B5280722B600FD767E /* Assets.xcassets */,
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6043C5AD280722B500FD767E /* AppDelegate.swift in Sources */,
+				6043C5C52807315600FD767E /* NewsItemViewModel.swift in Sources */,
 				6043C5C328072EC900FD767E /* NewsItemCell.swift in Sources */,
 				6043C5AF280722B500FD767E /* SceneDelegate.swift in Sources */,
 				6043C5C12807235E00FD767E /* NewsViewController.swift in Sources */,
