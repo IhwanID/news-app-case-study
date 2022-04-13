@@ -8,7 +8,7 @@
 import XCTest
 import TopNews
 
-final class NewsViewController: UIViewController {
+final class NewsViewController: UITableViewController {
     
     private var loader: NewsLoader?
     
@@ -19,7 +19,13 @@ final class NewsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        load()
         
+    }
+    
+    @objc private func load() {
         loader?.load { _ in }
     }
 }
@@ -39,6 +45,19 @@ class NewsViewControllerTests: XCTestCase {
         sut.loadViewIfNeeded()
         
         XCTAssertEqual(loader.loadCallCount, 1)
+    }
+    
+    func test_pullToRefresh_loadsNews() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        sut.refreshControl?.allTargets.forEach { target in
+            sut.refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach {
+                (target as NSObject).perform(Selector($0))
+            }
+        }
+        
+        XCTAssertEqual(loader.loadCallCount, 2)
     }
     
     // MARK: - Helpers
