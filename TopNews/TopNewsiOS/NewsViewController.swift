@@ -64,6 +64,8 @@ final public class NewsViewController: UITableViewController {
         if let url = cellModel.imageURL {
             cell.newsImageContainer.startShimmering()
             tasks[indexPath] = imageLoader?.loadImageData(from: url){ [weak cell] result in
+                let data = try? result.get()
+                cell?.newsImageView.image = data.map(UIImage.init) ?? nil
                 cell?.newsImageContainer.stopShimmering()
             }
         }
