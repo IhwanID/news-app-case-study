@@ -12,4 +12,5 @@ public final class NewsItemCell: UITableViewCell {
     public let authorContainer = UIView()
     public let authorLabel = UILabel()
     public let titleLabel = UILabel()
+    public let newsImageContainer = UIView()
 }

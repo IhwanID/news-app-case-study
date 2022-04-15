@@ -111,6 +111,26 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImageURLs, [news0.imageURL, news1.imageURL], "Expected two cancelled image URL requests once second image is also not visible anymore")
     }
     
+    func test_newsItemViewLoadingIndicator_isVisibleWhileLoadingImage() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [makeNews(), makeNews()])
+        
+        let view0 = sut.simulateNewsItemViewVisible(at: 0)
+        let view1 = sut.simulateNewsItemViewVisible(at: 1)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, true, "Expected loading indicator for first view while loading first image")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected loading indicator for second view while loading second image")
+        
+        loader.completeImageLoading(at: 0)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for first view once first image loading completes successfully")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected no loading indicator state change for second view once first image loading completes successfully")
+        
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no loading indicator state change for first view once second image loading completes with error")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for second view once second image loading completes with error")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: NewsViewController, loader: LoaderSpy) {
@@ -153,6 +173,7 @@ class NewsViewControllerTests: XCTestCase {
     
     class LoaderSpy: NewsLoader, NewsImageDataLoader {
         
+        
         private var newsRequest = [(NewsLoader.Result) -> Void]()
         
         var loadNewsCallCount: Int {
@@ -181,15 +202,28 @@ class NewsViewControllerTests: XCTestCase {
             }
         }
         
-        private(set) var loadedImageURLs = [URL]()
+        private var imageRequests = [(url: URL, completion: (NewsImageDataLoader.Result) -> Void)]()
+        
+        var loadedImageURLs: [URL] {
+            return imageRequests.map { $0.url}
+        }
         private(set) var cancelledImageURLs = [URL]()
         
-        func loadImageData(from url: URL) -> NewsImageDataLoaderTask{
-            loadedImageURLs.append(url)
+        func loadImageData(from url: URL, completion: @escaping (NewsImageDataLoader.Result) -> Void) -> NewsImageDataLoaderTask {
+            imageRequests.append((url, completion))
             
             return TaskSpy { [weak self] in
                 self?.cancelledImageURLs.append(url)
             }
+        }
+        
+        func completeImageLoading(with imageData: Data = Data(), at index: Int = 0) {
+            imageRequests[index].completion(.success(imageData))
+        }
+        
+        func completeImageLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "an error", code: 0)
+            imageRequests[index].completion(.failure(error))
         }
         
     }
@@ -236,6 +270,10 @@ private extension NewsViewController {
 private extension NewsItemCell {
     var isShowingAuthor: Bool {
         return !authorLabel.isHidden
+    }
+    
+    var isShowingImageLoadingIndicator: Bool {
+        return newsImageContainer.isShimmering
     }
     
     var authorText: String? {

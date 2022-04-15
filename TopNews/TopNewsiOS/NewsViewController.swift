@@ -13,7 +13,9 @@ public protocol NewsImageDataLoaderTask {
 }
 
 public protocol NewsImageDataLoader {
-    func loadImageData(from url: URL) -> NewsImageDataLoaderTask
+    typealias Result = Swift.Result<Data, Error>
+    
+    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> NewsImageDataLoaderTask
 }
 
 final public class NewsViewController: UITableViewController {
@@ -60,13 +62,15 @@ final public class NewsViewController: UITableViewController {
         cell.authorLabel.text = cellModel.author
         cell.titleLabel.text = cellModel.title
         if let url = cellModel.imageURL {
-            tasks[indexPath] = imageLoader?.loadImageData(from: url)
+            cell.newsImageContainer.startShimmering()
+            tasks[indexPath] = imageLoader?.loadImageData(from: url){ [weak cell] result in
+                cell?.newsImageContainer.stopShimmering()
+            }
         }
         return cell
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellModel = tableModel[indexPath.row]
         tasks[indexPath]?.cancel()
         tasks[indexPath] = nil
         
