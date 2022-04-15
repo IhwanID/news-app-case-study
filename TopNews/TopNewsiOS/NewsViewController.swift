@@ -29,15 +29,12 @@ final public class NewsViewController: UITableViewController {
     @objc private func load() {
         refreshControl?.beginRefreshing()
         loader?.load { [weak self] result in
-            switch result {
-            case let .success(news):
+            if let news = try? result.get() {
                 self?.tableModel = news
                 self?.tableView.reloadData()
-                self?.refreshControl?.endRefreshing()
-            case .failure:
-                break
+                
             }
-            
+            self?.refreshControl?.endRefreshing()
         }
     }
     
