@@ -62,16 +62,25 @@ final public class NewsViewController: UITableViewController {
         cell.authorLabel.text = cellModel.author
         cell.titleLabel.text = cellModel.title
         cell.newsImageRetryButton.isHidden = true
-        if let url = cellModel.imageURL {
-            cell.newsImageContainer.startShimmering()
-            tasks[indexPath] = imageLoader?.loadImageData(from: url){ [weak cell] result in
-                let data = try? result.get()
-                let image = data.map(UIImage.init) ?? nil
-                cell?.newsImageView.image = image
-                cell?.newsImageRetryButton.isHidden = (image != nil)
-                cell?.newsImageContainer.stopShimmering()
+        
+        let loadImage = { [weak self, weak cell] in
+            guard let self = self else { return }
+            
+            if let url = cellModel.imageURL {
+                cell?.newsImageContainer.startShimmering()
+                self.tasks[indexPath] = self.imageLoader?.loadImageData(from: url){ [weak cell] result in
+                    let data = try? result.get()
+                    let image = data.map(UIImage.init) ?? nil
+                    cell?.newsImageView.image = image
+                    cell?.newsImageRetryButton.isHidden = (image != nil)
+                    cell?.newsImageContainer.stopShimmering()
+                }
             }
         }
+        
+        cell.onRetry = loadImage
+        loadImage()
+        
         return cell
     }
     

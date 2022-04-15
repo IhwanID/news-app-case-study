@@ -188,6 +188,30 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(view?.isShowingRetryAction, true, "Expected retry action once image loading completes with invalid image data")
     }
     
+    func test_newsImageViewRetryAction_retriesImageLoad() {
+        let news0 = makeNews(url: URL(string: "http://url-0.com")!)
+        let news1 = makeNews(url: URL(string: "http://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [news0, news1])
+        
+        let view0 = sut.simulateNewsItemViewVisible(at: 0)
+        let view1 = sut.simulateNewsItemViewVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL], "Expected two image URL request for the two visible views")
+        
+        loader.completeImageLoadingWithError(at: 0)
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL], "Expected only two image URL requests before retry action")
+        
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL, news0.imageURL], "Expected third imageURL request after first view retry action")
+        
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL, news0.imageURL, news1.imageURL], "Expected fourth imageURL request after second view retry action")
+    }
+    
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: NewsViewController, loader: LoaderSpy) {
@@ -264,6 +288,7 @@ class NewsViewControllerTests: XCTestCase {
         var loadedImageURLs: [URL] {
             return imageRequests.map { $0.url}
         }
+        
         private(set) var cancelledImageURLs = [URL]()
         
         func loadImageData(from url: URL, completion: @escaping (NewsImageDataLoader.Result) -> Void) -> NewsImageDataLoaderTask {
@@ -325,6 +350,11 @@ private extension NewsViewController {
 }
 
 private extension NewsItemCell {
+    
+    func simulateRetryAction() {
+        newsImageRetryButton.simulateTap()
+    }
+    
     var isShowingAuthor: Bool {
         return !authorLabel.isHidden
     }
@@ -354,6 +384,16 @@ extension UIRefreshControl {
     func simulatePullToRefresh() {
         allTargets.forEach { target in
             actions(forTarget: target, forControlEvent: .valueChanged)?.forEach {
+                (target as NSObject).perform(Selector($0))
+            }
+        }
+    }
+}
+
+private extension UIButton {
+    func simulateTap() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach {
                 (target as NSObject).perform(Selector($0))
             }
         }
