@@ -78,7 +78,7 @@ class NewsViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [news0])
     }
     
-    func test_feedImageView_loadsImageURLWhenVisible() {
+    func test_newsItemView_loadsImageURLWhenVisible() {
         let news0 = makeNews(url: URL(string: "http://url-0.com")!)
         let news1 = makeNews(url: URL(string: "http://url-1.com")!)
         let (sut, loader) = makeSUT()
@@ -93,6 +93,22 @@ class NewsViewControllerTests: XCTestCase {
         
         sut.simulateNewsItemViewVisible(at: 1)
         XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL], "Expected second image URL request once second view also becomes visible")
+    }
+    
+    func test_newsItemView_cancelsImageLoadingWhenNotVisibleAnymore() {
+        let news0 = makeNews(url: URL(string: "http://url-0.com")!)
+        let news1 = makeNews(url: URL(string: "http://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [news0, news1])
+        XCTAssertEqual(loader.cancelledImageURLs, [], "Expected no cancelled image URL requests until image is not visible")
+        
+        sut.simulateNewsItemViewNotVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [news0.imageURL], "Expected one cancelled image URL request once first image is not visible anymore")
+        
+        sut.simulateNewsItemViewNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [news0.imageURL, news1.imageURL], "Expected two cancelled image URL requests once second image is also not visible anymore")
     }
     
     // MARK: - Helpers
@@ -158,10 +174,16 @@ class NewsViewControllerTests: XCTestCase {
         
         // MARK: - NewsImageDataLoader
         private(set) var loadedImageURLs = [URL]()
+        private(set) var cancelledImageURLs = [URL]()
         
         func loadImageData(from url: URL) {
             loadedImageURLs.append(url)
         }
+        
+        func cancelImageDataLoad(from url: URL) {
+            cancelledImageURLs.append(url)
+        }
+        
     }
     
 }
@@ -171,8 +193,17 @@ private extension NewsViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
-    func simulateNewsItemViewVisible(at index: Int) {
-        _ = newsItemView(at: index)
+    @discardableResult
+    func simulateNewsItemViewVisible(at index: Int) -> NewsItemCell? {
+        return newsItemView(at: index) as? NewsItemCell
+    }
+    
+    func simulateNewsItemViewNotVisible(at row: Int) {
+        let view = simulateNewsItemViewVisible(at: row)
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: newsItemSection)
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
     }
     
     var isShowingLoadingIndicator: Bool {
