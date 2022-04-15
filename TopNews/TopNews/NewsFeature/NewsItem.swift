@@ -8,14 +8,14 @@
 import Foundation
 
 public struct NewsItem {
-    let title: String
-    let author: String?
-    let source: String
-    let description: String
-    let content: String?
-    let newsURL: URL
-    let imageURL: URL?
-    let publishedAt: Date
+    public let title: String
+    public let author: String?
+    public let source: String
+    public let description: String
+    public let content: String?
+    public let newsURL: URL
+    public let imageURL: URL?
+    public let publishedAt: Date
 }
 
-extension NewsItem : Equatable {}
+extension NewsItem: Equatable {}
