@@ -13,19 +13,27 @@ public final class NewsUIComposer {
     private init() {}
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
-        let newsViewModel = NewsViewModel(newsLoader: newsLoader)
-        let refreshController = NewsRefreshViewController(viewModel: newsViewModel)
+        let presenter = NewsPresenter(newsLoader: newsLoader)
+        let refreshController = NewsRefreshViewController(presenter: presenter)
         let newsController = NewsViewController(refreshController: refreshController)
-        newsViewModel.onNewsLoad = adaptNewsToCellControllers(forwardingTo: newsController, loader: imageLoader)
+        presenter.loadingView = refreshController
+        presenter.newsView = NewsViewAdapter(controller: newsController, imageLoader: imageLoader)
         return newsController
     }
+}
+
+private final class NewsViewAdapter: NewsView {
+    private weak var controller: NewsViewController?
+    private let imageLoader: NewsImageDataLoader
     
-    private static func adaptNewsToCellControllers(forwardingTo controller: NewsViewController, loader: NewsImageDataLoader) -> ([NewsItem]) -> Void {
-        return { [weak controller] news in
-            controller?.tableModel = news.map { model in
-                NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: loader, imageTransformer: UIImage.init))
-            }
-        }
+    init(controller: NewsViewController, imageLoader: NewsImageDataLoader) {
+        self.controller = controller
+        self.imageLoader = imageLoader
     }
     
+    func display(news: [NewsItem]) {
+        controller?.tableModel = news.map { model in
+            NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: imageLoader, imageTransformer: UIImage.init))
+        }
+    }
 }
