@@ -16,11 +16,27 @@ public final class NewsUIComposer {
         let presenter = NewsPresenter(newsLoader: newsLoader)
         let refreshController = NewsRefreshViewController(presenter: presenter)
         let newsController = NewsViewController(refreshController: refreshController)
-        presenter.loadingView = refreshController
+        presenter.loadingView = WeakRefVirtualProxy(refreshController)
         presenter.newsView = NewsViewAdapter(controller: newsController, imageLoader: imageLoader)
         return newsController
     }
 }
+
+private final class WeakRefVirtualProxy<T: AnyObject> {
+    private weak var object: T?
+
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+extension WeakRefVirtualProxy: NewsLoadingView where T: NewsLoadingView {
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
+    }
+}
+
+
 
 private final class NewsViewAdapter: NewsView {
     private weak var controller: NewsViewController?

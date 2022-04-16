@@ -8,7 +8,7 @@
 import Foundation
 import TopNews
 
-protocol NewsLoadingView: AnyObject {
+protocol NewsLoadingView {
     func display(isLoading: Bool)
 }
 
@@ -26,7 +26,7 @@ final class NewsPresenter {
     }
 
     var newsView: NewsView?
-    weak var loadingView: NewsLoadingView?
+    var loadingView: NewsLoadingView?
 
     func loadNews() {
         loadingView?.display(isLoading: true)

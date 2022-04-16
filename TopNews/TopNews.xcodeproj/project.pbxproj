@@ -51,6 +51,8 @@
 		608E5B4E280AC6CF003C6483 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B4D280AC6CF003C6483 /* NewsViewModel.swift */; };
 		608E5B50280ADE50003C6483 /* NewsImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B4F280ADE50003C6483 /* NewsImageViewModel.swift */; };
 		608E5B53280B15F0003C6483 /* NewsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B52280B15F0003C6483 /* NewsPresenter.swift */; };
+		608E5B54280B6B3E003C6483 /* TopNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60069DBB27D4AC630036C308 /* TopNews.framework */; platformFilter = ios; };
+		608E5B55280B6B3E003C6483 /* TopNews.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 60069DBB27D4AC630036C308 /* TopNews.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		60975A2827F3FE4D00782133 /* RemoteNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60975A2727F3FE4D00782133 /* RemoteNewsItem.swift */; };
 		60975A2A27F3FE8F00782133 /* LocalNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60975A2927F3FE8F00782133 /* LocalNewsItem.swift */; };
 		60BAAC0D27FD4B6600FF035F /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BAAC0C27FD4B6600FF035F /* CoreDataHelper.swift */; };
@@ -95,6 +97,13 @@
 			remoteGlobalIDString = 60069DBA27D4AC630036C308;
 			remoteInfo = TopNews;
 		};
+		608E5B56280B6B3E003C6483 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60069DB227D4AC630036C308 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60069DBA27D4AC630036C308;
+			remoteInfo = TopNews;
+		};
 		60BAAC1B27FD545A00FF035F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 60069DB227D4AC630036C308 /* Project object */;
@@ -103,6 +112,20 @@
 			remoteInfo = TopNews;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		608E5B58280B6B3E003C6483 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				608E5B55280B6B3E003C6483 /* TopNews.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		60069DBB27D4AC630036C308 /* TopNews.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TopNews.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +211,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				608E5B54280B6B3E003C6483 /* TopNews.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,10 +590,12 @@
 				6043C5C72807368D00FD767E /* Sources */,
 				6043C5C82807368D00FD767E /* Frameworks */,
 				6043C5C92807368D00FD767E /* Resources */,
+				608E5B58280B6B3E003C6483 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				608E5B57280B6B3E003C6483 /* PBXTargetDependency */,
 			);
 			name = TopNewsiOS;
 			productName = TopNewsiOS;
@@ -850,6 +876,12 @@
 			isa = PBXTargetDependency;
 			target = 60069DBA27D4AC630036C308 /* TopNews */;
 			targetProxy = 60752AAC27D7962E004B3921 /* PBXContainerItemProxy */;
+		};
+		608E5B57280B6B3E003C6483 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 60069DBA27D4AC630036C308 /* TopNews */;
+			targetProxy = 608E5B56280B6B3E003C6483 /* PBXContainerItemProxy */;
 		};
 		60BAAC1C27FD545A00FF035F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
