@@ -31,8 +31,8 @@ private final class WeakRefVirtualProxy<T: AnyObject> {
 }
 
 extension WeakRefVirtualProxy: NewsLoadingView where T: NewsLoadingView {
-    func display(isLoading: Bool) {
-        object?.display(isLoading: isLoading)
+    func display(_ viewModel: NewsLoadingViewModel) {
+        object?.display(viewModel)
     }
 }
 
@@ -47,8 +47,8 @@ private final class NewsViewAdapter: NewsView {
         self.imageLoader = imageLoader
     }
     
-    func display(news: [NewsItem]) {
-        controller?.tableModel = news.map { model in
+    func display(_ viewModel: NewsViewModel) {
+        controller?.tableModel = viewModel.news.map { model in
             NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: imageLoader, imageTransformer: UIImage.init))
         }
     }

@@ -24,8 +24,8 @@ final class NewsRefreshViewController: NSObject, NewsLoadingView {
     }
     
     
-    func display(isLoading: Bool) {
-        if isLoading {
+    func display(_ viewModel: NewsLoadingViewModel) {
+        if viewModel.isLoading {
             view.beginRefreshing()
         } else {
             view.endRefreshing()
