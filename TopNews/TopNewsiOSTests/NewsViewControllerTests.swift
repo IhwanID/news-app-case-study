@@ -227,6 +227,21 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL], "Expected second image URL request once second image is near visible")
     }
     
+    func test_newsImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore() {
+        let news0 = makeNews(url: URL(string: "http://url-0.com")!)
+        let news1 = makeNews(url: URL(string: "http://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [news0, news1])
+        XCTAssertEqual(loader.cancelledImageURLs, [], "Expected no cancelled image URL requests until image is not near visible")
+        
+        sut.simulateNewsImageViewNotNearVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [news0.imageURL], "Expected first cancelled image URL request once first image is not near visible anymore")
+        
+        sut.simulateNewsImageViewNotNearVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [news0.imageURL, news1.imageURL], "Expected second cancelled image URL request once second image is not near visible anymore")
+    }
     
     
     // MARK: - Helpers
@@ -351,6 +366,14 @@ private extension NewsViewController {
         let ds = tableView.prefetchDataSource
         let index = IndexPath(row: row, section: newsItemSection)
         ds?.tableView(tableView, prefetchRowsAt: [index])
+    }
+    
+    func simulateNewsImageViewNotNearVisible(at row: Int) {
+        simulateNewsImageViewNearVisible(at: row)
+        
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: newsItemSection)
+        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
     var isShowingLoadingIndicator: Bool {
