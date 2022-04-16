@@ -10,37 +10,29 @@ import TopNews
 
 public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
-    private var newsLoader: NewsLoader?
+    private var refreshController: NewsRefreshViewController?
     private var imageLoader: NewsImageDataLoader?
-    private var tableModel = [NewsItem]()
+    private var tableModel = [NewsItem]() {
+        didSet { tableView.reloadData() }
+    }
     private var tasks = [IndexPath: NewsImageDataLoaderTask]()
     
     public convenience init(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) {
         self.init()
-        self.newsLoader = newsLoader
+        self.refreshController = NewsRefreshViewController(newsLoader: newsLoader)
         self.imageLoader = imageLoader
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl = refreshController?.view
+        refreshController?.onRefresh = { [weak self] news in
+            self?.tableModel = news
+        }
         tableView.prefetchDataSource = self
-        load()
-        
+        refreshController?.refresh()
     }
     
-    @objc private func load() {
-        refreshControl?.beginRefreshing()
-        newsLoader?.load { [weak self] result in
-            if let news = try? result.get() {
-                self?.tableModel = news
-                self?.tableView.reloadData()
-                
-            }
-            self?.refreshControl?.endRefreshing()
-        }
-    }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableModel.count
