@@ -10,9 +10,9 @@ import TopNews
 
 final class NewsImageCellController {
     
-    private let viewModel: NewsImageViewModel
+    private let viewModel: NewsImageViewModel<UIImage>
     
-    init(viewModel: NewsImageViewModel) {
+    init(viewModel: NewsImageViewModel<UIImage>) {
         self.viewModel = viewModel
     }
     

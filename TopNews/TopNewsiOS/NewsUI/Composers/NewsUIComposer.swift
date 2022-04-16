@@ -7,6 +7,7 @@
 
 import Foundation
 import TopNews
+import UIKit
 
 public final class NewsUIComposer {
     private init() {}
@@ -22,7 +23,7 @@ public final class NewsUIComposer {
     private static func adaptNewsToCellControllers(forwardingTo controller: NewsViewController, loader: NewsImageDataLoader) -> ([NewsItem]) -> Void {
         return { [weak controller] news in
             controller?.tableModel = news.map { model in
-                NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: loader))
+                NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: loader, imageTransformer: UIImage.init))
             }
         }
     }
