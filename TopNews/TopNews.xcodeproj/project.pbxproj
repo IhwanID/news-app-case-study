@@ -288,6 +288,7 @@
 		6043C5CC2807368D00FD767E /* TopNewsiOS */ = {
 			isa = PBXGroup;
 			children = (
+				608E5B51280B1429003C6483 /* NewsPresentation */,
 				608E5B42280AB09B003C6483 /* NewsImageLoader */,
 				608E5B40280AA91A003C6483 /* NewsUI */,
 			);
@@ -406,7 +407,6 @@
 		608E5B40280AA91A003C6483 /* NewsUI */ = {
 			isa = PBXGroup;
 			children = (
-				608E5B4C280AC6C2003C6483 /* Model */,
 				608E5B49280AB60F003C6483 /* Composers */,
 				608E5B36280AA604003C6483 /* Views */,
 				608E5B35280AA5F3003C6483 /* Controllers */,
@@ -439,13 +439,13 @@
 			path = Composers;
 			sourceTree = "<group>";
 		};
-		608E5B4C280AC6C2003C6483 /* Model */ = {
+		608E5B51280B1429003C6483 /* NewsPresentation */ = {
 			isa = PBXGroup;
 			children = (
 				608E5B4D280AC6CF003C6483 /* NewsViewModel.swift */,
 				608E5B4F280ADE50003C6483 /* NewsImageViewModel.swift */,
 			);
-			path = Model;
+			path = NewsPresentation;
 			sourceTree = "<group>";
 		};
 		60BAAC0B27FD4AB800FF035F /* Codable */ = {
