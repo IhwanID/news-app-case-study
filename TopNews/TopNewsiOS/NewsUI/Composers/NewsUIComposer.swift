@@ -14,7 +14,7 @@ public final class NewsUIComposer {
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
         let presenter = NewsPresenter(newsLoader: newsLoader)
-        let refreshController = NewsRefreshViewController(presenter: presenter)
+        let refreshController = NewsRefreshViewController(loadNews: presenter.loadNews)
         let newsController = NewsViewController(refreshController: refreshController)
         presenter.loadingView = WeakRefVirtualProxy(refreshController)
         presenter.newsView = NewsViewAdapter(controller: newsController, imageLoader: imageLoader)
