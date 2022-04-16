@@ -211,6 +211,23 @@ class NewsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL, news0.imageURL, news1.imageURL], "Expected fourth imageURL request after second view retry action")
     }
     
+    func test_newsImageView_preloadsImageURLWhenNearVisible() {
+        let news0 = makeNews(url: URL(string: "http://url-0.com")!)
+        let news1 = makeNews(url: URL(string: "http://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [news0, news1])
+        XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests until image is near visible")
+        
+        sut.simulateNewsImageViewNearVisible(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL], "Expected first image URL request once first image is near visible")
+        
+        sut.simulateNewsImageViewNearVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [news0.imageURL, news1.imageURL], "Expected second image URL request once second image is near visible")
+    }
+    
+    
     
     // MARK: - Helpers
     
@@ -328,6 +345,12 @@ private extension NewsViewController {
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: newsItemSection)
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+    }
+    
+    func simulateNewsImageViewNearVisible(at row: Int) {
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: newsItemSection)
+        ds?.tableView(tableView, prefetchRowsAt: [index])
     }
     
     var isShowingLoadingIndicator: Bool {
