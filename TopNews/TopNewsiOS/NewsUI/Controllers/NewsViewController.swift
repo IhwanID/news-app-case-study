@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import TopNews
 
 public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
