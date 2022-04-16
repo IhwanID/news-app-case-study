@@ -254,31 +254,6 @@ class NewsViewControllerTests: XCTestCase {
         return (sut, loader)
     }
     
-    private func assertThat(_ sut: NewsViewController, isRendering news: [NewsItem], file: StaticString = #file, line: UInt = #line) {
-        guard sut.numberOfRenderedNewsItemViews() == news.count else {
-            return XCTFail("Expected \(news.count) images, got \(sut.numberOfRenderedNewsItemViews()) instead.", file: file, line: line)
-        }
-        
-        news.enumerated().forEach { index, item in
-            assertThat(sut, hasViewConfiguredFor: item, at: index, file: file, line: line)
-        }
-    }
-    
-    private func assertThat(_ sut: NewsViewController, hasViewConfiguredFor news: NewsItem, at index: Int, file: StaticString = #file, line: UInt = #line) {
-        let view = sut.newsItemView(at: index)
-        
-        guard let cell = view as? NewsItemCell else {
-            return XCTFail("Expected \(NewsItemCell.self) instance, got \(String(describing: view)) instead", file: file, line: line)
-        }
-        
-        let shouldAuthorBeVisible = (news.author != nil)
-        XCTAssertEqual(cell.isShowingAuthor, shouldAuthorBeVisible, "Expected `isShowingAuthor` to be \(shouldAuthorBeVisible) for news view at index (\(index))", file: file, line: line)
-        
-        XCTAssertEqual(cell.authorText, news.author, "Expected location text to be \(String(describing: news.author)) for news view at index (\(index))", file: file, line: line)
-        
-        XCTAssertEqual(cell.titleText, news.title, "Expected title text to be \(String(describing:  news.title)) for news view at index (\(index)", file: file, line: line)
-    }
-    
     private func makeNews(title: String? = nil, author: String? = nil, url: URL = URL(string: "http://any-url.com")!) -> NewsItem {
         return NewsItem(title: "A title", author: "An Author", source: "A Source", description: "A Desc", content: "A content", newsURL: url, imageURL: url, publishedAt: Date())
         
