@@ -54,7 +54,7 @@ final class NewsImageCellController {
         }
     }
     
-    deinit {
+    func cancelLoad() {
         task?.cancel()
     }
 }
