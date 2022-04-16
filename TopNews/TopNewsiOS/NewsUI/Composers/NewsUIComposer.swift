@@ -14,12 +14,16 @@ public final class NewsUIComposer {
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
         let refreshController = NewsRefreshViewController(newsLoader: newsLoader)
         let newsController = NewsViewController(refreshController: refreshController)
-        refreshController.onRefresh = { [weak newsController] news in
-            newsController?.tableModel = news.map { model in
-                NewsImageCellController(model: model, imageLoader: imageLoader)
-            }
-        }
+        refreshController.onRefresh = adaptNewsToCellControllers(forwardingTo: newsController, loader: imageLoader)
         return newsController
     }
+    
+    private static func adaptNewsToCellControllers(forwardingTo controller: NewsViewController, loader: NewsImageDataLoader) -> ([NewsItem]) -> Void {
+            return { [weak controller] news in
+                controller?.tableModel = news.map { model in
+                    NewsImageCellController(model: model, imageLoader: loader)
+                }
+            }
+        }
     
 }
