@@ -25,24 +25,19 @@ protocol NewsView {
 }
 
 final class NewsPresenter {
-    typealias Observer<T> = (T) -> Void
-    
-    private let newsLoader: NewsLoader
-
-    init(newsLoader: NewsLoader) {
-        self.newsLoader = newsLoader
-    }
-
     var newsView: NewsView?
     var loadingView: NewsLoadingView?
-
-    func loadNews() {
+    
+    func didStartLoadingNews() {
         loadingView?.display(NewsLoadingViewModel(isLoading: true))
-        newsLoader.load { [weak self] result in
-            if let news = try? result.get() {
-                self?.newsView?.display(NewsViewModel(news: news))
-            }
-            self?.loadingView?.display(NewsLoadingViewModel(isLoading: false))
-        }
+    }
+    
+    func didFinishLoadingNews(with news: [NewsItem]) {
+        newsView?.display(NewsViewModel(news: news))
+        loadingView?.display(NewsLoadingViewModel(isLoading: false))
+    }
+    
+    func didFinishLoadingNews(with error: Error) {
+        loadingView?.display(NewsLoadingViewModel(isLoading: false))
     }
 }
