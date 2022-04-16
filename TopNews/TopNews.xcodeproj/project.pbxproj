@@ -41,6 +41,7 @@
 		608E5B32280AA4DD003C6483 /* UIButton+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B31280AA4DD003C6483 /* UIButton+TestHelpers.swift */; };
 		608E5B34280AA558003C6483 /* UIControl+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B33280AA558003C6483 /* UIControl+TestHelpers.swift */; };
 		608E5B39280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B38280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift */; };
+		608E5B3B280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E5B3A280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift */; };
 		60975A2827F3FE4D00782133 /* RemoteNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60975A2727F3FE4D00782133 /* RemoteNewsItem.swift */; };
 		60975A2A27F3FE8F00782133 /* LocalNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60975A2927F3FE8F00782133 /* LocalNewsItem.swift */; };
 		60BAAC0D27FD4B6600FF035F /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BAAC0C27FD4B6600FF035F /* CoreDataHelper.swift */; };
@@ -129,6 +130,7 @@
 		608E5B31280AA4DD003C6483 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
 		608E5B33280AA558003C6483 /* UIControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		608E5B38280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewsViewControllers+TestHelpers.swift"; sourceTree = "<group>"; };
+		608E5B3A280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewsItemCell+TestHelpers.swift"; sourceTree = "<group>"; };
 		60975A2727F3FE4D00782133 /* RemoteNewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNewsItem.swift; sourceTree = "<group>"; };
 		60975A2927F3FE8F00782133 /* LocalNewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNewsItem.swift; sourceTree = "<group>"; };
 		60BAAC0C27FD4B6600FF035F /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				608E5B31280AA4DD003C6483 /* UIButton+TestHelpers.swift */,
 				608E5B33280AA558003C6483 /* UIControl+TestHelpers.swift */,
 				608E5B38280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift */,
+				608E5B3A280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -726,6 +729,7 @@
 				6048EB142807895F0038B4D2 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				608E5B32280AA4DD003C6483 /* UIButton+TestHelpers.swift in Sources */,
 				608E5B232809B176003C6483 /* NewsViewControllerTests.swift in Sources */,
+				608E5B3B280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift in Sources */,
 				608E5B39280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift in Sources */,
 				608E5B34280AA558003C6483 /* UIControl+TestHelpers.swift in Sources */,
 				608E5B2E280AA41B003C6483 /* UIImage+TestHelpers.swift in Sources */,
