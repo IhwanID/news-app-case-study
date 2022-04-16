@@ -9,20 +9,22 @@ import Foundation
 import TopNews
 import UIKit
 
+protocol NewsRefreshViewControllerDelegate {
+    func didRequestNewsRefresh()
+}
+
 final class NewsRefreshViewController: NSObject, NewsLoadingView {
     
     private(set) lazy var view = loadView()
-    private let loadNews: () -> Void
+    private let delegate: NewsRefreshViewControllerDelegate
     
-    init(loadNews: @escaping () -> Void) {
-        self.loadNews = loadNews
+    init(delegate: NewsRefreshViewControllerDelegate) {
+        self.delegate = delegate
     }
-    
     
     @objc func refresh() {
-        loadNews()
+        delegate.didRequestNewsRefresh()
     }
-    
     
     func display(_ viewModel: NewsLoadingViewModel) {
         if viewModel.isLoading {

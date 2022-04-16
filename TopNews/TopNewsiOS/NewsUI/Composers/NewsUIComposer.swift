@@ -15,7 +15,7 @@ public final class NewsUIComposer {
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
         let presenter = NewsPresenter()
         let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader, presenter: presenter)
-        let refreshController = NewsRefreshViewController(loadNews: presentationAdapter.loadNews)
+        let refreshController = NewsRefreshViewController(delegate: presentationAdapter)
         let newsController = NewsViewController(refreshController: refreshController)
         presenter.loadingView = WeakRefVirtualProxy(refreshController)
         presenter.newsView = NewsViewAdapter(controller: newsController, imageLoader: imageLoader)
@@ -53,7 +53,7 @@ private final class NewsViewAdapter: NewsView {
     }
 }
 
-private final class NewsLoaderPresentationAdapter {
+private final class NewsLoaderPresentationAdapter: NewsRefreshViewControllerDelegate {
     private let newsLoader: NewsLoader
     private let presenter: NewsPresenter
 
@@ -73,5 +73,9 @@ private final class NewsLoaderPresentationAdapter {
             case let .failure(error):
                 self?.presenter.didFinishLoadingNews(with: error)            }
         }
+    }
+    
+    func didRequestNewsRefresh() {
+        loadNews()
     }
 }
