@@ -8,48 +8,42 @@
 import UIKit
 import TopNews
 
-final class NewsImageCellController {
+protocol NewsImageCellControllerDelegate {
+    func didRequestImage()
+    func didCancelImageRequest()
+}
+
+final class NewsImageCellController: NewsImageView {
     
-    private let viewModel: NewsImageViewModel<UIImage>
+    private let delegate: NewsImageCellControllerDelegate
+    private lazy var cell = NewsItemCell()
     
-    init(viewModel: NewsImageViewModel<UIImage>) {
-        self.viewModel = viewModel
+    init(delegate: NewsImageCellControllerDelegate) {
+        self.delegate = delegate
     }
     
     func view() -> UITableViewCell {
-        let cell = binded(NewsItemCell())
-        viewModel.loadImageData()
+        delegate.didRequestImage()
         
         return cell
     }
     
     func preload() {
-        viewModel.loadImageData()
+        delegate.didRequestImage()
     }
     
     func cancelLoad() {
-        viewModel.cancelImageDataLoad()
+        delegate.didCancelImageRequest()
     }
     
-    private func binded(_ cell: NewsItemCell) -> NewsItemCell {
-            cell.authorContainer.isHidden = !viewModel.hasAuthor
-            cell.authorLabel.text = viewModel.author
-            cell.titleLabel.text = viewModel.title
+    func display(_ viewModel: NewsImageViewModel<UIImage>) {
+        cell.authorContainer.isHidden = !viewModel.hasAuthor
+        cell.authorLabel.text = viewModel.author
+        cell.titleLabel.text = viewModel.title
+        cell.newsImageView.image = viewModel.image
+        cell.newsImageContainer.isShimmering = viewModel.isLoading
+        cell.newsImageRetryButton.isHidden = !viewModel.shouldRetry
+        cell.onRetry = delegate.didRequestImage
         
-            cell.onRetry = viewModel.loadImageData
-
-            viewModel.onImageLoad = { [weak cell] image in
-                cell?.newsImageView.image = image
-            }
-
-            viewModel.onImageLoadingStateChange = { [weak cell] isLoading in
-                cell?.newsImageContainer.isShimmering = isLoading
-            }
-
-            viewModel.onShouldRetryImageLoadStateChange = { [weak cell] shouldRetry in
-                cell?.newsImageRetryButton.isHidden = !shouldRetry
-            }
-
-            return cell
-        }
+    }
 }

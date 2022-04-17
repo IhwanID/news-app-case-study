@@ -9,28 +9,33 @@ import Foundation
 import TopNews
 import UIKit
 
-final class NewsRefreshViewController: NSObject {
+protocol NewsRefreshViewControllerDelegate {
+    func didRequestNewsRefresh()
+}
+
+final class NewsRefreshViewController: NSObject, NewsLoadingView {
     
-    private(set) lazy var view = binded(UIRefreshControl())
-    private let viewModel: NewsViewModel
+    private(set) lazy var view = loadView()
+    private let delegate: NewsRefreshViewControllerDelegate
     
-    init(viewModel: NewsViewModel) {
-        self.viewModel = viewModel
+    init(delegate: NewsRefreshViewControllerDelegate) {
+        self.delegate = delegate
     }
-    
     
     @objc func refresh() {
-        viewModel.loadNews()
+        delegate.didRequestNewsRefresh()
     }
     
-    private func binded(_ view: UIRefreshControl) -> UIRefreshControl {
-        viewModel.onLoadingStateChange = { [weak view] isLoading in
-            if isLoading {
-                view?.beginRefreshing()
-            } else {
-                view?.endRefreshing()
-            }
+    func display(_ viewModel: NewsLoadingViewModel) {
+        if viewModel.isLoading {
+            view.beginRefreshing()
+        } else {
+            view.endRefreshing()
         }
+    }
+    
+    private func loadView() -> UIRefreshControl {
+        let view = UIRefreshControl()
         view.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return view
     }
