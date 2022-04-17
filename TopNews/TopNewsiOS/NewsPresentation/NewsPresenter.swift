@@ -8,16 +8,8 @@
 import Foundation
 import TopNews
 
-struct NewsLoadingViewModel {
-    let isLoading: Bool
-}
-
 protocol NewsLoadingView {
     func display(_ viewModel: NewsLoadingViewModel)
-}
-
-struct NewsViewModel {
-    let news: [NewsItem]
 }
 
 protocol NewsView {
