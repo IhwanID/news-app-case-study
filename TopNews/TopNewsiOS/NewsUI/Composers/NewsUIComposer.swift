@@ -23,7 +23,7 @@ public final class NewsUIComposer {
 
 private final class WeakRefVirtualProxy<T: AnyObject> {
     private weak var object: T?
-
+    
     init(_ object: T) {
         self.object = object
     }
@@ -32,6 +32,12 @@ private final class WeakRefVirtualProxy<T: AnyObject> {
 extension WeakRefVirtualProxy: NewsLoadingView where T: NewsLoadingView {
     func display(_ viewModel: NewsLoadingViewModel) {
         object?.display(viewModel)
+    }
+}
+
+extension WeakRefVirtualProxy: NewsImageView where T: NewsImageView, T.Image == UIImage {
+    func display(_ model: NewsImageViewModel<UIImage>) {
+        object?.display(model)
     }
 }
 
@@ -46,7 +52,14 @@ private final class NewsViewAdapter: NewsView {
     
     func display(_ viewModel: NewsViewModel) {
         controller?.tableModel = viewModel.news.map { model in
-            NewsImageCellController(viewModel: NewsImageViewModel(model: model, imageLoader: imageLoader, imageTransformer: UIImage.init))
+            let adapter = NewsImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<NewsImageCellController>, UIImage>(model: model, imageLoader: imageLoader)
+            let view = NewsImageCellController(delegate: adapter)
+            
+            adapter.presenter = NewsImagePresenter(
+                view: WeakRefVirtualProxy(view),
+                imageTransformer: UIImage.init)
+            
+            return view
         }
     }
 }
@@ -54,19 +67,19 @@ private final class NewsViewAdapter: NewsView {
 private final class NewsLoaderPresentationAdapter: NewsRefreshViewControllerDelegate {
     private let newsLoader: NewsLoader
     var presenter: NewsPresenter?
-
+    
     init(newsLoader: NewsLoader) {
         self.newsLoader = newsLoader
     }
-
+    
     func loadNews() {
         presenter?.didStartLoadingNews()
-
+        
         newsLoader.load { [weak self] result in
             switch result {
             case let .success(news):
                 self?.presenter?.didFinishLoadingNews(with: news)
-
+                
             case let .failure(error):
                 self?.presenter?.didFinishLoadingNews(with: error)            }
         }
@@ -75,4 +88,39 @@ private final class NewsLoaderPresentationAdapter: NewsRefreshViewControllerDele
     func didRequestNewsRefresh() {
         loadNews()
     }
+}
+
+
+private final class NewsImageDataLoaderPresentationAdapter<View: NewsImageView, Image>: NewsImageCellControllerDelegate where View.Image == Image {
+    private var task: NewsImageDataLoaderTask?
+    private let model: NewsItem
+    private let imageLoader: NewsImageDataLoader
+    
+    var presenter: NewsImagePresenter<View, Image>?
+    
+    init(model: NewsItem, imageLoader: NewsImageDataLoader) {
+        self.model = model
+        self.imageLoader = imageLoader
+    }
+    
+    func didRequestImage() {
+        presenter?.didStartLoadingImageData(for: model)
+        
+        let model = self.model
+        if let url = model.imageURL {
+            task = imageLoader.loadImageData(from: url) { [weak self] result in
+                switch result {
+                case let .success(data):
+                    self?.presenter?.didFinishLoadingImageData(with: data, for: model)
+                    
+                case let .failure(error):
+                    self?.presenter?.didFinishLoadingImageData(with: error, for: model)
+                }
+            }
+        }
+    }
+    func didCancelImageRequest() {
+        task?.cancel()
+    }
+    
 }
