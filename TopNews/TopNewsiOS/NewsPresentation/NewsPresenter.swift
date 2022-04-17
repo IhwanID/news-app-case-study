@@ -25,19 +25,24 @@ protocol NewsView {
 }
 
 final class NewsPresenter {
-    var newsView: NewsView?
-    var loadingView: NewsLoadingView?
+    private let newsView: NewsView
+    private let loadingView: NewsLoadingView
+    
+    init(newsView: NewsView, loadingView: NewsLoadingView){
+        self.newsView = newsView
+        self.loadingView = loadingView
+    }
     
     func didStartLoadingNews() {
-        loadingView?.display(NewsLoadingViewModel(isLoading: true))
+        loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
     
     func didFinishLoadingNews(with news: [NewsItem]) {
-        newsView?.display(NewsViewModel(news: news))
-        loadingView?.display(NewsLoadingViewModel(isLoading: false))
+        newsView.display(NewsViewModel(news: news))
+        loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
     
     func didFinishLoadingNews(with error: Error) {
-        loadingView?.display(NewsLoadingViewModel(isLoading: false))
+        loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
 }

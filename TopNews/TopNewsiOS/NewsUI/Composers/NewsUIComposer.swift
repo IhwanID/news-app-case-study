@@ -13,12 +13,10 @@ public final class NewsUIComposer {
     private init() {}
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
-        let presenter = NewsPresenter()
-        let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader, presenter: presenter)
+        let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader)
         let refreshController = NewsRefreshViewController(delegate: presentationAdapter)
         let newsController = NewsViewController(refreshController: refreshController)
-        presenter.loadingView = WeakRefVirtualProxy(refreshController)
-        presenter.newsView = NewsViewAdapter(controller: newsController, imageLoader: imageLoader)
+        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(refreshController))
         return newsController
     }
 }
@@ -55,23 +53,22 @@ private final class NewsViewAdapter: NewsView {
 
 private final class NewsLoaderPresentationAdapter: NewsRefreshViewControllerDelegate {
     private let newsLoader: NewsLoader
-    private let presenter: NewsPresenter
+    var presenter: NewsPresenter?
 
-    init(newsLoader: NewsLoader, presenter: NewsPresenter) {
+    init(newsLoader: NewsLoader) {
         self.newsLoader = newsLoader
-        self.presenter = presenter
     }
 
     func loadNews() {
-        presenter.didStartLoadingNews()
+        presenter?.didStartLoadingNews()
 
         newsLoader.load { [weak self] result in
             switch result {
             case let .success(news):
-                self?.presenter.didFinishLoadingNews(with: news)
+                self?.presenter?.didFinishLoadingNews(with: news)
 
             case let .failure(error):
-                self?.presenter.didFinishLoadingNews(with: error)            }
+                self?.presenter?.didFinishLoadingNews(with: error)            }
         }
     }
     
