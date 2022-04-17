@@ -128,9 +128,20 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="rmw-3H-ipJ">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="OA3-dL-jeP" eventType="valueChanged" id="gz3-4D-nZ8"/>
+                        </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="refreshController" destination="OA3-dL-jeP" id="1ra-VD-WSq"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xC3-dB-p4Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="OA3-dL-jeP" customClass="NewsRefreshViewController" customModule="TopNewsiOS" customModuleProvider="target">
+                    <connections>
+                        <outlet property="view" destination="rmw-3H-ipJ" id="7rh-y4-ECj"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="1094.2028985507247" y="104.46428571428571"/>
         </scene>

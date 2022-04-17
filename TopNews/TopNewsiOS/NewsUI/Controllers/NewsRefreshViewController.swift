@@ -15,28 +15,20 @@ protocol NewsRefreshViewControllerDelegate {
 
 final class NewsRefreshViewController: NSObject, NewsLoadingView {
     
-    private(set) lazy var view = loadView()
-    private let delegate: NewsRefreshViewControllerDelegate
+    @IBOutlet private var view: UIRefreshControl?
     
-    init(delegate: NewsRefreshViewControllerDelegate) {
-        self.delegate = delegate
-    }
+    var delegate: NewsRefreshViewControllerDelegate?
     
-    @objc func refresh() {
-        delegate.didRequestNewsRefresh()
+    @IBAction func refresh() {
+        delegate?.didRequestNewsRefresh()
     }
     
     func display(_ viewModel: NewsLoadingViewModel) {
         if viewModel.isLoading {
-            view.beginRefreshing()
+            view?.beginRefreshing()
         } else {
-            view.endRefreshing()
+            view?.endRefreshing()
         }
     }
     
-    private func loadView() -> UIRefreshControl {
-        let view = UIRefreshControl()
-        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return view
-    }
 }

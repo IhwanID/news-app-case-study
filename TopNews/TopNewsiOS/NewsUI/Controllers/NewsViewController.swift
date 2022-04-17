@@ -9,7 +9,8 @@ import UIKit
 
 public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
-    var refreshController: NewsRefreshViewController?
+    @IBOutlet var refreshController: NewsRefreshViewController?
+    
     var tableModel = [NewsImageCellController]() {
         didSet { tableView.reloadData() }
     }
@@ -17,7 +18,6 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     public override func viewDidLoad() {
         super.viewDidLoad()
         tableView.prefetchDataSource = self
-        refreshControl = refreshController?.view
         refreshController?.refresh()
     }
     

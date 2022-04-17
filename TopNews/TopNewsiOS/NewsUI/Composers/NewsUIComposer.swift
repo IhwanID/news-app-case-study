@@ -14,12 +14,12 @@ public final class NewsUIComposer {
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
         let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader)
-        let refreshController = NewsRefreshViewController(delegate: presentationAdapter)
         
         let bundle = Bundle(for: NewsViewController.self)
         let storyboard = UIStoryboard(name: "News", bundle: bundle)
         let newsController = storyboard.instantiateInitialViewController() as! NewsViewController
-        newsController.refreshController = refreshController
+        let refreshController = newsController.refreshController!
+        refreshController.delegate = presentationAdapter
         
         presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(refreshController))
         return newsController
