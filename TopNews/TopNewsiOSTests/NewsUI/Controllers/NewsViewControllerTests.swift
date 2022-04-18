@@ -11,6 +11,14 @@ import TopNewsiOS
 
 class NewsViewControllerTests: XCTestCase {
     
+    func test_newsView_hasTitle() {
+        let (sut, _) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.title, "My News")
+    }
+    
     func test_loadNewsActions_requestNewsFromLoader() {
         let (sut, loader) = makeSUT()
         
