@@ -200,6 +200,8 @@
 		60E78C39280D2A04006A35FB /* UIImageView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Animations.swift"; sourceTree = "<group>"; };
 		60E78C3E280D547A006A35FB /* NewsUIIntegrationTestss+Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewsUIIntegrationTestss+Localization.swift"; sourceTree = "<group>"; };
 		60E78C42280D55E6006A35FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/News.strings; sourceTree = "<group>"; };
+		60E78C44280D5622006A35FB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/News.strings; sourceTree = "<group>"; };
+		60E78C45280D5638006A35FB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/News.strings; sourceTree = "<group>"; };
 		60F9F26227F369030025E86D /* LocalNewsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNewsLoader.swift; sourceTree = "<group>"; };
 		60F9F26427F369930025E86D /* NewsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -715,6 +717,8 @@
 			knownRegions = (
 				en,
 				Base,
+				id,
+				de,
 			);
 			mainGroup = 60069DB127D4AC630036C308;
 			productRefGroup = 60069DBC27D4AC630036C308 /* Products */;
@@ -921,6 +925,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				60E78C42280D55E6006A35FB /* en */,
+				60E78C44280D5622006A35FB /* id */,
+				60E78C45280D5638006A35FB /* de */,
 			);
 			name = News.strings;
 			sourceTree = "<group>";
@@ -932,6 +938,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -996,6 +1003,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
