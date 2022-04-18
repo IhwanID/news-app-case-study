@@ -1,5 +1,5 @@
 //
-//  NewsViewControllerTest+Assertions.swift
+//  NewsUIIntegrationTests+Assertions.swift
 //  TopNewsiOSTests
 //
 //  Created by Ihwan on 16/04/22.
@@ -9,7 +9,7 @@ import XCTest
 import TopNews
 import TopNewsiOS
 
-extension NewsViewControllerTests {
+extension NewsUIIntegrationTests {
     func assertThat(_ sut: NewsViewController, isRendering news: [NewsItem], file: StaticString = #file, line: UInt = #line) {
         guard sut.numberOfRenderedNewsItemViews() == news.count else {
             return XCTFail("Expected \(news.count) images, got \(sut.numberOfRenderedNewsItemViews()) instead.", file: file, line: line)

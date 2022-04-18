@@ -1,5 +1,5 @@
 //
-//  NewsViewControllerTests+LoaderSpy.swift
+//  NewsUIIntegrationTests+LoaderSpy.swift
 //  TopNewsiOSTests
 //
 //  Created by Ihwan on 16/04/22.
@@ -9,7 +9,7 @@ import Foundation
 import TopNewsiOS
 import TopNews
 
-extension NewsViewControllerTests {
+extension NewsUIIntegrationTests {
     class LoaderSpy: NewsLoader, NewsImageDataLoader {
         
         

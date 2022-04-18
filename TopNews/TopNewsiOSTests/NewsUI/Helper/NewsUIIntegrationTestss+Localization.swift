@@ -1,5 +1,5 @@
 //
-//  NewsViewControllerTests+Localization.swift
+//  NewsUIIntegrationTests+Localization.swift
 //  TopNewsiOSTests
 //
 //  Created by Ihwan on 18/04/22.
@@ -8,7 +8,7 @@
 import XCTest
 import TopNewsiOS
 
-extension NewsViewControllerTests {
+extension NewsUIIntegrationTests {
     func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
         let table = "News"
         let bundle = Bundle(for: NewsViewController.self)

@@ -1,5 +1,5 @@
 //
-//  NewsViewControllerTest.swift
+//  NewsUIIntegrationTests.swift
 //  TopNewsiOSTests
 //
 //  Created by Ihwan on 14/04/22.
@@ -9,7 +9,7 @@ import XCTest
 import TopNewsiOS
 @testable import TopNews
 
-class NewsViewControllerTests: XCTestCase {
+class NewsUIIntegrationTests: XCTestCase {
     
     func test_newsView_hasTitle() {
         let (sut, _) = makeSUT()
