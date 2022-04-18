@@ -16,7 +16,12 @@ class NewsViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.title, "My News")
+        let bundle = Bundle(for: NewsViewController.self)
+        let localizedKey = "NEWS_VIEW_TITLE"
+        let localizedTitle = bundle.localizedString(forKey: localizedKey, value: nil, table: "News")
+        
+        XCTAssertNotEqual(localizedKey, localizedTitle, "Missing localized string for key: \(localizedKey)")
+        XCTAssertEqual(sut.title, localizedTitle)
     }
     
     func test_loadNewsActions_requestNewsFromLoader() {

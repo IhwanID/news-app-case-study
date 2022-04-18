@@ -75,6 +75,8 @@
 		60E78C36280CC30C006A35FB /* News.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60E78C35280CC30C006A35FB /* News.storyboard */; };
 		60E78C38280D1AA0006A35FB /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E78C37280D1AA0006A35FB /* UITableView+Dequeueing.swift */; };
 		60E78C3A280D2A04006A35FB /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E78C39280D2A04006A35FB /* UIImageView+Animations.swift */; };
+		60E78C3C280D4C47006A35FB /* News.strings in Resources */ = {isa = PBXBuildFile; fileRef = 60E78C3B280D4C47006A35FB /* News.strings */; };
+		60E78C3D280D4CA0006A35FB /* News.strings in Resources */ = {isa = PBXBuildFile; fileRef = 60E78C3B280D4C47006A35FB /* News.strings */; };
 		60F9F26327F369030025E86D /* LocalNewsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9F26227F369030025E86D /* LocalNewsLoader.swift */; };
 		60F9F26527F369930025E86D /* NewsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9F26427F369930025E86D /* NewsStore.swift */; };
 /* End PBXBuildFile section */
@@ -195,6 +197,7 @@
 		60E78C35280CC30C006A35FB /* News.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = News.storyboard; sourceTree = "<group>"; };
 		60E78C37280D1AA0006A35FB /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		60E78C39280D2A04006A35FB /* UIImageView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Animations.swift"; sourceTree = "<group>"; };
+		60E78C3B280D4C47006A35FB /* News.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = News.strings; sourceTree = "<group>"; };
 		60F9F26227F369030025E86D /* LocalNewsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNewsLoader.swift; sourceTree = "<group>"; };
 		60F9F26427F369930025E86D /* NewsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -483,6 +486,7 @@
 				608E5B4F280ADE50003C6483 /* NewsImageViewModel.swift */,
 				608E5B5B280BC073003C6483 /* NewsLoadingViewModel.swift */,
 				608E5B5D280BC0A9003C6483 /* NewsViewModel.swift */,
+				60E78C3B280D4C47006A35FB /* News.strings */,
 			);
 			path = NewsPresentation;
 			sourceTree = "<group>";
@@ -744,6 +748,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60E78C36280CC30C006A35FB /* News.storyboard in Resources */,
+				60E78C3C280D4C47006A35FB /* News.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -751,6 +756,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60E78C3D280D4CA0006A35FB /* News.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

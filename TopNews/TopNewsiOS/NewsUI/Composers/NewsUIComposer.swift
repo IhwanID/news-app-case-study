@@ -25,10 +25,10 @@ private extension NewsViewController {
     static func makeWith(delegate: NewsViewControllerDelegate, title: String) -> NewsViewController {
         let bundle = Bundle(for: NewsViewController.self)
         let storyboard = UIStoryboard(name: "News", bundle: bundle)
-        let feedController = storyboard.instantiateInitialViewController() as! NewsViewController
-        feedController.delegate = delegate
-        feedController.title = title
-        return feedController
+        let newsController = storyboard.instantiateInitialViewController() as! NewsViewController
+        newsController.delegate = delegate
+        newsController.title = title
+        return newsController
     }
 }
 

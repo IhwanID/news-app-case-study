@@ -26,7 +26,10 @@ final class NewsPresenter {
     }
     
     static var title: String {
-        return "My News"
+        return NSLocalizedString("NEWS_VIEW_TITLE",
+                                 tableName: "News",
+                                 bundle: Bundle(for: NewsPresenter.self),
+                                 comment: "Title for the news view")
     }
     
     func didStartLoadingNews() {
