@@ -25,6 +25,10 @@ final class NewsPresenter {
         self.loadingView = loadingView
     }
     
+    static var title: String {
+        return "My News"
+    }
+    
     func didStartLoadingNews() {
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
