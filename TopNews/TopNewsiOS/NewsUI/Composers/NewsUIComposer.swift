@@ -13,11 +13,31 @@ public final class NewsUIComposer {
     private init() {}
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
-        let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader)
+        let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: MainQueueDispatchDecorator(decoratee: newsLoader))
         let newsController = NewsViewController.makeWith(delegate: presentationAdapter, title: NewsPresenter.title)
         
         presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(newsController) )
         return newsController
+    }
+}
+
+private final class MainQueueDispatchDecorator: NewsLoader {
+    private let decoratee: NewsLoader
+
+    init(decoratee: NewsLoader) {
+        self.decoratee = decoratee
+    }
+
+    func load(completion: @escaping (NewsLoader.Result) -> Void) {
+        decoratee.load { result in
+            if Thread.isMainThread {
+                completion(result)
+            } else {
+                DispatchQueue.main.async {
+                    completion(result)
+                }
+            }
+        }
     }
 }
 

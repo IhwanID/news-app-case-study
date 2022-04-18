@@ -33,24 +33,15 @@ final class NewsPresenter {
     }
     
     func didStartLoadingNews() {
-        guard Thread.isMainThread else {
-            return DispatchQueue.main.async { [weak self] in self?.didStartLoadingNews() }
-        }
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
     
     func didFinishLoadingNews(with news: [NewsItem]) {
-        guard Thread.isMainThread else {
-            return DispatchQueue.main.async { [weak self] in self?.didFinishLoadingNews(with: news) }
-        }
         newsView.display(NewsViewModel(news: news))
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
     
     func didFinishLoadingNews(with error: Error) {
-        guard Thread.isMainThread else {
-            return DispatchQueue.main.async { [weak self] in self?.didFinishLoadingNews(with: error) }
-        }
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
 }
