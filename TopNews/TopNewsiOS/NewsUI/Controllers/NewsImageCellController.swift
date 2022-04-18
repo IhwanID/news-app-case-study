@@ -42,7 +42,7 @@ final class NewsImageCellController: NewsImageView {
         cell?.authorContainer.isHidden = !viewModel.hasAuthor
         cell?.authorLabel.text = viewModel.author
         cell?.titleLabel.text = viewModel.title
-        cell?.newsImageView.image = viewModel.image
+        cell?.newsImageView.setImageAnimated(viewModel.image)
         cell?.newsImageContainer.isShimmering = viewModel.isLoading
         cell?.newsImageRetryButton.isHidden = !viewModel.shouldRetry
         cell?.onRetry = delegate.didRequestImage
