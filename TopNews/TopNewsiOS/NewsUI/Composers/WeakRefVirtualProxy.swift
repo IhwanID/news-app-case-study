@@ -26,3 +26,9 @@ extension WeakRefVirtualProxy: NewsImageView where T: NewsImageView, T.Image == 
         object?.display(model)
     }
 }
+
+extension WeakRefVirtualProxy: NewsErrorView where T: NewsErrorView {
+    func display(_ viewModel: NewsErrorViewModel) {
+        object?.display(viewModel)
+    }
+}
