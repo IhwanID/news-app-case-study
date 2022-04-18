@@ -26,7 +26,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsItemCell" rowHeight="520" id="NDB-nY-aje" customClass="NewsItemCell" customModule="Prototype" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsItemCell" rowHeight="520" id="NDB-nY-aje" customClass="NewsItemCell" customModule="TopNewsiOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="60.5" width="414" height="520"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NDB-nY-aje" id="AMr-po-QWg">
@@ -78,6 +78,9 @@
                                                             <state key="normal" title="↻">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="NDB-nY-aje" eventType="touchUpInside" id="vLH-4G-XKx"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.89019607840000003" green="0.89019607840000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -118,6 +121,14 @@
                                         <constraint firstItem="Ygu-GK-Meo" firstAttribute="top" secondItem="AMr-po-QWg" secondAttribute="topMargin" priority="999" constant="6" id="l7N-j6-P1s"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="authorContainer" destination="TxX-aQ-3GD" id="YrC-dH-t4d"/>
+                                    <outlet property="authorLabel" destination="3V2-uR-biH" id="7bK-d6-0bs"/>
+                                    <outlet property="newsImageContainer" destination="wST-tz-0M8" id="2w4-MO-C5O"/>
+                                    <outlet property="newsImageRetryButton" destination="fYp-IG-DPT" id="ccA-QK-epd"/>
+                                    <outlet property="newsImageView" destination="Vty-Dq-uAU" id="VDq-IN-bCI"/>
+                                    <outlet property="titleLabel" destination="qP8-K3-aiZ" id="3Ka-c5-noe"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

@@ -16,13 +16,15 @@ protocol NewsImageCellControllerDelegate {
 final class NewsImageCellController: NewsImageView {
     
     private let delegate: NewsImageCellControllerDelegate
-    private lazy var cell = NewsItemCell()
+    private var cell: NewsItemCell?
     
     init(delegate: NewsImageCellControllerDelegate) {
         self.delegate = delegate
     }
     
-    func view() -> UITableViewCell {
+    func view(in tableView: UITableView) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsItemCell") as! NewsItemCell
+        self.cell = cell
         delegate.didRequestImage()
         
         return cell
@@ -33,17 +35,21 @@ final class NewsImageCellController: NewsImageView {
     }
     
     func cancelLoad() {
+        releaseCellForReuse()
         delegate.didCancelImageRequest()
     }
     
     func display(_ viewModel: NewsImageViewModel<UIImage>) {
-        cell.authorContainer.isHidden = !viewModel.hasAuthor
-        cell.authorLabel.text = viewModel.author
-        cell.titleLabel.text = viewModel.title
-        cell.newsImageView.image = viewModel.image
-        cell.newsImageContainer.isShimmering = viewModel.isLoading
-        cell.newsImageRetryButton.isHidden = !viewModel.shouldRetry
-        cell.onRetry = delegate.didRequestImage
-        
+        cell?.authorContainer.isHidden = !viewModel.hasAuthor
+        cell?.authorLabel.text = viewModel.author
+        cell?.titleLabel.text = viewModel.title
+        cell?.newsImageView.image = viewModel.image
+        cell?.newsImageContainer.isShimmering = viewModel.isLoading
+        cell?.newsImageRetryButton.isHidden = !viewModel.shouldRetry
+        cell?.onRetry = delegate.didRequestImage
+    }
+    
+    private func releaseCellForReuse() {
+        cell = nil
     }
 }
