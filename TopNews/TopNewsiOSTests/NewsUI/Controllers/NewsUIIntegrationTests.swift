@@ -86,6 +86,14 @@ class NewsUIIntegrationTests: XCTestCase {
         assertThat(sut, isRendering: [news0])
     }
     
+    func test_errorView_doesNotRenderErrorOnLoad() {
+        let (sut, _) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.errorMessage, nil)
+    }
+    
     func test_newsItemView_loadsImageURLWhenVisible() {
         let news0 = makeNews(url: URL(string: "http://url-0.com")!)
         let news1 = makeNews(url: URL(string: "http://url-1.com")!)
@@ -263,31 +271,31 @@ class NewsUIIntegrationTests: XCTestCase {
     }
     
     func test_loadNewaCompletion_dispatchesFromBackgroundToMainThread() {
-            let (sut, loader) = makeSUT()
-            sut.loadViewIfNeeded()
-
-            let exp = expectation(description: "Wait for background queue")
-            DispatchQueue.global().async {
-                loader.completeNewsLoading(at: 0)
-                exp.fulfill()
-            }
-            wait(for: [exp], timeout: 5.0)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeNewsLoading(at: 0)
+            exp.fulfill()
         }
+        wait(for: [exp], timeout: 5.0)
+    }
     
     func test_loadImageDataCompletion_dispatchesFromBackgroundToMainThread() {
-            let (sut, loader) = makeSUT()
-
-            sut.loadViewIfNeeded()
-            loader.completeNewsLoading(with: [makeNews()])
-            _ = sut.simulateNewsItemViewVisible(at: 0)
-
-            let exp = expectation(description: "Wait for background queue")
-            DispatchQueue.global().async {
-                loader.completeImageLoading(with: self.anyImageData(), at: 0)
-                exp.fulfill()
-            }
-            wait(for: [exp], timeout: 1.0)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeNewsLoading(with: [makeNews()])
+        _ = sut.simulateNewsItemViewVisible(at: 0)
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeImageLoading(with: self.anyImageData(), at: 0)
+            exp.fulfill()
         }
+        wait(for: [exp], timeout: 1.0)
+    }
     
     // MARK: - Helpers
     

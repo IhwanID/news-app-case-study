@@ -7,6 +7,10 @@
 
 import UIKit
 
+public final class ErrorView: UIView {
+    public var message: String?
+}
+
 protocol NewsViewControllerDelegate {
     func didRequestNewsRefresh()
 }
@@ -17,6 +21,8 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     var tableModel = [NewsImageCellController]() {
         didSet { tableView.reloadData() }
     }
+    
+    public let errorView = ErrorView()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
