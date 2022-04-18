@@ -23,11 +23,10 @@ final class NewsImageCellController: NewsImageView {
     }
     
     func view(in tableView: UITableView) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsItemCell") as! NewsItemCell
-        self.cell = cell
+        cell = tableView.dequeueReusableCell()
         delegate.didRequestImage()
         
-        return cell
+        return cell!
     }
     
     func preload() {
