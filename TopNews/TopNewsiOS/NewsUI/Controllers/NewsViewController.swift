@@ -15,7 +15,15 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     var delegate: NewsViewControllerDelegate?
     
     var tableModel = [NewsImageCellController]() {
-        didSet { tableView.reloadData() }
+        didSet {
+            if Thread.isMainThread {
+                tableView.reloadData()
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
     }
     
     public override func viewDidLoad() {
@@ -24,6 +32,10 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: NewsLoadingViewModel) {
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.async { [weak self] in self?.display(viewModel) }
+        }
+        
         if viewModel.isLoading {
             refreshControl?.beginRefreshing()
         } else {
