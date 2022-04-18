@@ -14,15 +14,21 @@ public final class NewsUIComposer {
     
     public static func newsComposedWith(newsLoader: NewsLoader, imageLoader: NewsImageDataLoader) -> NewsViewController {
         let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: newsLoader)
-        
-        let bundle = Bundle(for: NewsViewController.self)
-        let storyboard = UIStoryboard(name: "News", bundle: bundle)
-        let newsController = storyboard.instantiateInitialViewController() as! NewsViewController
-        newsController.delegate = presentationAdapter
-        newsController.title = NewsPresenter.title
+        let newsController = NewsViewController.makeWith(delegate: presentationAdapter, title: NewsPresenter.title)
         
         presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(newsController) )
         return newsController
+    }
+}
+
+private extension NewsViewController {
+    static func makeWith(delegate: NewsViewControllerDelegate, title: String) -> NewsViewController {
+        let bundle = Bundle(for: NewsViewController.self)
+        let storyboard = UIStoryboard(name: "News", bundle: bundle)
+        let feedController = storyboard.instantiateInitialViewController() as! NewsViewController
+        feedController.delegate = delegate
+        feedController.title = title
+        return feedController
     }
 }
 
