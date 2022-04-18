@@ -18,12 +18,15 @@ extension NewsViewController {
         return newsItemView(at: index) as? NewsItemCell
     }
     
-    func simulateNewsItemViewNotVisible(at row: Int) {
+    @discardableResult
+    func simulateNewsItemViewNotVisible(at row: Int) -> NewsItemCell? {
         let view = simulateNewsItemViewVisible(at: row)
         
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: newsItemSection)
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+        
+        return view
     }
     
     func simulateNewsImageViewNearVisible(at row: Int) {

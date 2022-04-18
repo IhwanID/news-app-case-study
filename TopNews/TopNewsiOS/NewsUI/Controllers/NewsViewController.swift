@@ -7,25 +7,33 @@
 
 import UIKit
 
-public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching {
+protocol NewsViewControllerDelegate {
+    func didRequestNewsRefresh()
+}
+
+public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching, NewsLoadingView {
+    var delegate: NewsViewControllerDelegate?
     
-    private var refreshController: NewsRefreshViewController?
     var tableModel = [NewsImageCellController]() {
         didSet { tableView.reloadData() }
     }
     
-    convenience init(refreshController: NewsRefreshViewController) {
-        self.init()
-        self.refreshController = refreshController
-    }
-    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.prefetchDataSource = self
-        refreshControl = refreshController?.view
-        refreshController?.refresh()
+        refresh()
     }
     
+    func display(_ viewModel: NewsLoadingViewModel) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
+    }
+    
+    @IBAction func refresh() {
+        delegate?.didRequestNewsRefresh()
+    }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableModel.count
@@ -33,7 +41,7 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        return cellController(forRowAt: indexPath).view()
+        return cellController(forRowAt: indexPath).view(in: tableView)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
