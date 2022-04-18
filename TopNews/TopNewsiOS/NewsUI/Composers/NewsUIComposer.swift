@@ -19,6 +19,7 @@ public final class NewsUIComposer {
         let storyboard = UIStoryboard(name: "News", bundle: bundle)
         let newsController = storyboard.instantiateInitialViewController() as! NewsViewController
         newsController.delegate = presentationAdapter
+        newsController.title = NewsPresenter.title
         
         presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(newsController) )
         return newsController

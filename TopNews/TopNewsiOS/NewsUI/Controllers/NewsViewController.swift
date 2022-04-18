@@ -20,7 +20,6 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        title = NewsPresenter.title
         refresh()
     }
     
