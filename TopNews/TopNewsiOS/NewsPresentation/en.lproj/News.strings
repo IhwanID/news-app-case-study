@@ -6,3 +6,4 @@
   
 */
 "NEWS_VIEW_TITLE" = "My News";
+"NEWS_VIEW_CONNECTION_ERROR" = "Couldn't connect to server";
