@@ -86,7 +86,7 @@ class NewsUIIntegrationTests: XCTestCase {
         assertThat(sut, isRendering: [news0])
     }
     
-    func test_loadNewsCompletion_rendersErrorMessageOnError() {
+    func test_loadNewsCompletion_rendersErrorMessageOnErrorUntilNextReload() {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -95,6 +95,9 @@ class NewsUIIntegrationTests: XCTestCase {
         
         loader.completeNewsLoadingWithError(at: 0)
         XCTAssertEqual(sut.errorMessage, localized("NEWS_VIEW_CONNECTION_ERROR"))
+        
+        sut.simulateUserInitiatedNewsReload()
+        XCTAssertEqual(sut.errorMessage, nil)
     }
     
     func test_newsItemView_loadsImageURLWhenVisible() {

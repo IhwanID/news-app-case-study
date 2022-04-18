@@ -9,7 +9,7 @@ import Foundation
 import TopNews
 
 struct NewsErrorViewModel {
-    let message: String
+    let message: String?
 }
 
 protocol NewsErrorView {
@@ -50,6 +50,7 @@ final class NewsPresenter {
     }
     
     func didStartLoadingNews() {
+        errorView.display(NewsErrorViewModel(message: nil))
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
     
