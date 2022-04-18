@@ -18,10 +18,9 @@ public final class NewsUIComposer {
         let bundle = Bundle(for: NewsViewController.self)
         let storyboard = UIStoryboard(name: "News", bundle: bundle)
         let newsController = storyboard.instantiateInitialViewController() as! NewsViewController
-        let refreshController = newsController.refreshController!
-        refreshController.delegate = presentationAdapter
+        newsController.delegate = presentationAdapter
         
-        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(refreshController))
+        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(newsController) )
         return newsController
     }
 }
@@ -69,7 +68,7 @@ private final class NewsViewAdapter: NewsView {
     }
 }
 
-private final class NewsLoaderPresentationAdapter: NewsRefreshViewControllerDelegate {
+private final class NewsLoaderPresentationAdapter: NewsViewControllerDelegate {
     private let newsLoader: NewsLoader
     var presenter: NewsPresenter?
     
