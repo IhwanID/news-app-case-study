@@ -25,6 +25,13 @@ final class NewsPresenter {
         self.loadingView = loadingView
     }
     
+    static var title: String {
+        return NSLocalizedString("NEWS_VIEW_TITLE",
+                                 tableName: "News",
+                                 bundle: Bundle(for: NewsPresenter.self),
+                                 comment: "Title for the news view")
+    }
+    
     func didStartLoadingNews() {
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
