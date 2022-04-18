@@ -16,7 +16,7 @@ public final class NewsUIComposer {
         let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: MainQueueDispatchDecorator(decoratee: newsLoader))
         let newsController = NewsViewController.makeWith(delegate: presentationAdapter, title: NewsPresenter.title)
         
-        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: imageLoader), loadingView: WeakRefVirtualProxy(newsController) )
+        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)), loadingView: WeakRefVirtualProxy(newsController) )
         return newsController
     }
 }
@@ -43,6 +43,17 @@ extension MainQueueDispatchDecorator: NewsLoader where T == NewsLoader {
             self?.dispatch { completion(result) }
         }
     }
+}
+
+extension MainQueueDispatchDecorator: NewsImageDataLoader where T == NewsImageDataLoader {
+    func loadImageData(from url: URL, completion: @escaping (NewsImageDataLoader.Result) -> Void) -> NewsImageDataLoaderTask {
+        decoratee.loadImageData(from: url) { [weak self] result in
+            self?.dispatch {
+                completion(result)
+            }
+        }
+    }
+    
 }
 
 private extension NewsViewController {
