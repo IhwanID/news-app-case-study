@@ -16,7 +16,7 @@ public final class NewsUIComposer {
         let presentationAdapter = NewsLoaderPresentationAdapter(newsLoader: MainQueueDispatchDecorator(decoratee: newsLoader))
         let newsController = makeNewsViewController(delegate: presentationAdapter, title: NewsPresenter.title)
         
-        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)), loadingView: WeakRefVirtualProxy(newsController) )
+        presentationAdapter.presenter = NewsPresenter(newsView: NewsViewAdapter(controller: newsController, imageLoader: MainQueueDispatchDecorator(decoratee: imageLoader)), loadingView: WeakRefVirtualProxy(newsController), errorView: WeakRefVirtualProxy(newsController) )
         return newsController
     }
     

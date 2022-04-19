@@ -11,7 +11,9 @@ protocol NewsViewControllerDelegate {
     func didRequestNewsRefresh()
 }
 
-public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching, NewsLoadingView {
+public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching, NewsLoadingView, NewsErrorView {
+    
+    @IBOutlet private(set) public var errorView: ErrorView?
     var delegate: NewsViewControllerDelegate?
     
     var tableModel = [NewsImageCellController]() {
@@ -24,11 +26,11 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: NewsLoadingViewModel) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
+        refreshControl?.update(isRefreshing: viewModel.isLoading)
+    }
+    
+    func display(_ viewModel: NewsErrorViewModel) {
+        errorView?.message = viewModel.message
     }
     
     @IBAction func refresh() {
