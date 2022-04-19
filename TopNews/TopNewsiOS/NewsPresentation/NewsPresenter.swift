@@ -46,7 +46,7 @@ final class NewsPresenter {
     }
     
     func didStartLoadingNews() {
-        errorView.display(NewsErrorViewModel(message: nil))
+        errorView.display(.noError)
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
     
@@ -56,7 +56,7 @@ final class NewsPresenter {
     }
     
     func didFinishLoadingNews(with error: Error) {
-        errorView.display(NewsErrorViewModel(message: newsLoadError))
+        errorView.display(.error(message: newsLoadError))
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
 }
