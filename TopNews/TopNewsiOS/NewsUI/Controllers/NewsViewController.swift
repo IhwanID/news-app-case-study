@@ -17,13 +17,12 @@ protocol NewsViewControllerDelegate {
 
 public final class NewsViewController: UITableViewController, UITableViewDataSourcePrefetching, NewsLoadingView, NewsErrorView {
     
+    @IBOutlet private(set) public var errorView: ErrorView?
     var delegate: NewsViewControllerDelegate?
     
     var tableModel = [NewsImageCellController]() {
         didSet { tableView.reloadData() }
     }
-    
-    public let errorView = ErrorView()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +38,7 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: NewsErrorViewModel) {
-        errorView.message = viewModel.message
+        errorView?.message = viewModel.message
     }
     
     @IBAction func refresh() {
