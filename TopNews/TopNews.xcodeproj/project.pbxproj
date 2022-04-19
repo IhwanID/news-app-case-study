@@ -392,6 +392,16 @@
 			path = FeedStoreSpecs;
 			sourceTree = "<group>";
 		};
+		6052B466280ED84400D779F8 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				60E78C37280D1AA0006A35FB /* UITableView+Dequeueing.swift */,
+				60E78C39280D2A04006A35FB /* UIImageView+Animations.swift */,
+				608E5B2A280A27D0003C6483 /* UIView+Shimmer.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		60752AA027D789E4004B3921 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -418,7 +428,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		608E5B2C280AA402003C6483 /* Helper */ = {
+		608E5B2C280AA402003C6483 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				608E5B2D280AA41B003C6483 /* UIImage+TestHelpers.swift */,
@@ -431,7 +441,7 @@
 				608E5B3E280AA814003C6483 /* NewsUIIntegrationTests+Assertions.swift */,
 				60E78C3E280D547A006A35FB /* NewsUIIntegrationTestss+Localization.swift */,
 			);
-			path = Helper;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		608E5B35280AA5F3003C6483 /* Controllers */ = {
@@ -446,11 +456,9 @@
 		608E5B36280AA604003C6483 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				608E5B2A280A27D0003C6483 /* UIView+Shimmer.swift */,
+				6052B466280ED84400D779F8 /* Helpers */,
 				608E5B202809AFD2003C6483 /* NewsItemCell.swift */,
 				60E78C35280CC30C006A35FB /* News.storyboard */,
-				60E78C37280D1AA0006A35FB /* UITableView+Dequeueing.swift */,
-				60E78C39280D2A04006A35FB /* UIImageView+Animations.swift */,
 				6052B464280ED61700D779F8 /* ErrorView.swift */,
 			);
 			path = Views;
@@ -477,7 +485,7 @@
 		608E5B41280AA92C003C6483 /* NewsUI */ = {
 			isa = PBXGroup;
 			children = (
-				608E5B2C280AA402003C6483 /* Helper */,
+				608E5B2C280AA402003C6483 /* Helpers */,
 				608E5B37280AA623003C6483 /* Controllers */,
 			);
 			path = NewsUI;
