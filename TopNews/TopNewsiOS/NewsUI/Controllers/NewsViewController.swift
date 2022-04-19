@@ -26,11 +26,7 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: NewsLoadingViewModel) {
-        if viewModel.isLoading {
-            refreshControl?.beginRefreshing()
-        } else {
-            refreshControl?.endRefreshing()
-        }
+        refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
     func display(_ viewModel: NewsErrorViewModel) {
