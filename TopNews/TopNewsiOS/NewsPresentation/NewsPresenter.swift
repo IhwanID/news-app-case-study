@@ -8,10 +8,6 @@
 import Foundation
 import TopNews
 
-struct NewsErrorViewModel {
-    let message: String?
-}
-
 protocol NewsErrorView {
     func display(_ viewModel: NewsErrorViewModel)
 }
