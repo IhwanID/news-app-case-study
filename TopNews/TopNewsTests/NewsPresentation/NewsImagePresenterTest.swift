@@ -8,10 +8,10 @@
 import XCTest
 import TopNews
 
-struct NewsImageViewModel {
+struct NewsImageViewModel<Image>  {
     let author: String?
     let title: String?
-    let image: Any?
+    let image: Image?
     let isLoading: Bool
     let shouldRetry: Bool
     
@@ -21,14 +21,16 @@ struct NewsImageViewModel {
 }
 
 protocol NewsImageView {
-    func display(_ model: NewsImageViewModel)
+    associatedtype Image
+    
+    func display(_ model: NewsImageViewModel<Image>)
 }
 
-class NewsImagePresenter {
-    private let view: NewsImageView
-    private let imageTransformer: (Data) -> Any?
+final class NewsImagePresenter<View: NewsImageView, Image> where View.Image == Image {
+    private let view: View
+    private let imageTransformer: (Data) -> Image?
     
-    init(view: NewsImageView, imageTransformer: @escaping (Data) -> Any?) {
+    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
         self.imageTransformer = imageTransformer
     }
@@ -38,7 +40,8 @@ class NewsImagePresenter {
     }
     
     func didFinishLoadingImageData(with data: Data, for model: NewsItem) {
-        view.display(NewsImageViewModel(author: model.author, title: model.title, image: imageTransformer(data), isLoading: false, shouldRetry: true))
+        let image = imageTransformer(data)
+        view.display(NewsImageViewModel(author: model.author, title: model.title, image: image, isLoading: false, shouldRetry: image == nil))
     }
 }
 
@@ -81,10 +84,26 @@ class NewsImagePresenterTests: XCTestCase {
         XCTAssertNil(message?.image)
     }
     
+    func test_didFinishLoadingImageData_displaysImageOnSuccessfulTransformation() {
+        let image = uniqueItem()
+        let data = Data()
+        let transformedData = AnyImage()
+        let (sut, view) = makeSUT(imageTransformer: { _ in transformedData })
+        
+        sut.didFinishLoadingImageData(with: data, for: image)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.author, image.author)
+        XCTAssertEqual(message?.title, image.title)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.shouldRetry, false)
+        XCTAssertEqual(message?.image, transformedData)
+    }
     
     // MARK: - Helpers
     
-    private func makeSUT(imageTransformer: @escaping (Data) -> Any? = { _ in nil }, file: StaticString = #file, line: UInt = #line) -> (sut: NewsImagePresenter, view: ViewSpy) {
+    private func makeSUT(imageTransformer: @escaping (Data) -> AnyImage? = { _ in nil }, file: StaticString = #file, line: UInt = #line) -> (sut: NewsImagePresenter<ViewSpy, AnyImage>, view: ViewSpy) {
         let view = ViewSpy()
         let sut = NewsImagePresenter(view: view, imageTransformer: imageTransformer)
         trackForMemoryLeaks(view, file: file, line: line)
@@ -92,15 +111,17 @@ class NewsImagePresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private var fail: (Data) -> Any? {
+    private var fail: (Data) -> AnyImage? {
         return { _ in nil }
     }
     
+    private struct AnyImage: Equatable {}
+    
     private class ViewSpy: NewsImageView {
         
-        private(set) var messages = [NewsImageViewModel]()
+        private(set) var messages = [NewsImageViewModel<AnyImage>]()
         
-        func display(_ model: NewsImageViewModel) {
+        func display(_ model: NewsImageViewModel<AnyImage>) {
             messages.append(model)
         }
     }
