@@ -8,6 +8,14 @@
 import Foundation
 import XCTest
 
+protocol NewsLoadingView {
+    func display(_ viewModel: NewsLoadingViewModel)
+}
+
+struct NewsLoadingViewModel {
+    let isLoading: Bool
+}
+
 struct NewsErrorViewModel {
     let message: String?
     
@@ -26,13 +34,16 @@ protocol NewsErrorView {
 
 final class NewsPresenter {
     private let errorView: NewsErrorView
+    private let loadingView: NewsLoadingView
     
-    init(errorView: NewsErrorView) {
+    init(loadingView: NewsLoadingView, errorView: NewsErrorView) {
         self.errorView = errorView
+        self.loadingView = loadingView
     }
     
     func didStartLoadingNews() {
         errorView.display(.noError)
+        loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
 }
 
@@ -44,34 +55,41 @@ class NewsPresenterTests: XCTestCase {
         XCTAssertTrue(view.messages.isEmpty, "Expected no view messages")
     }
     
-    func test_didStartLoadingNews_displaysNoErrorMessage() {
-            let (sut, view) = makeSUT()
-
-            sut.didStartLoadingNews()
-
-            XCTAssertEqual(view.messages, [.display(errorMessage: .none)])
-        }
+    func test_didStartLoadingNews_displaysNoErrorMessageAndStartsLoading() {
+        let (sut, view) = makeSUT()
+        
+        sut.didStartLoadingNews()
+        
+        XCTAssertEqual(view.messages, [.display(errorMessage: .none), .display(isLoading: true)])
+    }
     
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: NewsPresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = NewsPresenter(errorView: view)
+        let sut = NewsPresenter(loadingView: view, errorView: view)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
     }
     
-    private class ViewSpy: NewsErrorView {
+    private class ViewSpy: NewsErrorView, NewsLoadingView {
+        
+        
         
         enum Message: Equatable {
-                    case display(errorMessage: String?)
-                }
-       
+            case display(errorMessage: String?)
+            case display(isLoading: Bool)
+        }
+        
         private(set) var messages = [Message]()
         
         func display(_ viewModel: NewsErrorViewModel) {
             messages.append(.display(errorMessage: viewModel.message))
+        }
+        
+        func display(_ viewModel: NewsLoadingViewModel) {
+            messages.append(.display(isLoading: viewModel.isLoading))
         }
     }
     
