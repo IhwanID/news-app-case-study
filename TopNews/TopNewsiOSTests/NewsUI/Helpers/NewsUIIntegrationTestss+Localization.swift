@@ -6,12 +6,12 @@
 //
 
 import XCTest
-import TopNewsiOS
+import TopNews
 
 extension NewsUIIntegrationTests {
     func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
         let table = "News"
-        let bundle = Bundle(for: NewsViewController.self)
+        let bundle = Bundle(for: NewsPresenter.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: table)
         if value == key {
             XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)

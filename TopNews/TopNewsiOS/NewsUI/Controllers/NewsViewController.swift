@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import TopNews
 
 protocol NewsViewControllerDelegate {
     func didRequestNewsRefresh()
@@ -25,11 +26,11 @@ public final class NewsViewController: UITableViewController, UITableViewDataSou
         refresh()
     }
     
-    func display(_ viewModel: NewsLoadingViewModel) {
+    public func display(_ viewModel: NewsLoadingViewModel) {
         refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
-    func display(_ viewModel: NewsErrorViewModel) {
+    public func display(_ viewModel: NewsErrorViewModel) {
         errorView?.message = viewModel.message
     }
     
