@@ -32,6 +32,8 @@
 		6052B468280ED8A700D779F8 /* NewsErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052B467280ED8A700D779F8 /* NewsErrorViewModel.swift */; };
 		6052B46A280ED90E00D779F8 /* UIRefreshControl+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6052B469280ED90E00D779F8 /* UIRefreshControl+Helpers.swift */; };
 		60712F28281021530092CC82 /* NewsPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60712F27281021530092CC82 /* NewsPresenterTests.swift */; };
+		60712F29281024D90092CC82 /* NewsCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D63CEB27F94B980046409E /* NewsCacheTestHelpers.swift */; };
+		60712F2A281026620092CC82 /* SharedTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D63CED27F94BF30046409E /* SharedTestHelper.swift */; };
 		60752AA227D78A13004B3921 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60752AA127D78A13004B3921 /* XCTestCase+MemoryLeakTracking.swift */; };
 		60752AAA27D7962E004B3921 /* TopNewsEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60752AA927D7962E004B3921 /* TopNewsEndToEndTests.swift */; };
 		60752AAB27D7962E004B3921 /* TopNews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60069DBB27D4AC630036C308 /* TopNews.framework */; };
@@ -911,11 +913,13 @@
 			files = (
 				6048EB142807895F0038B4D2 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				608E5B32280AA4DD003C6483 /* UIButton+TestHelpers.swift in Sources */,
+				60712F2A281026620092CC82 /* SharedTestHelper.swift in Sources */,
 				60E78C3F280D547A006A35FB /* NewsUIIntegrationTestss+Localization.swift in Sources */,
 				608E5B232809B176003C6483 /* NewsUIIntegrationTests.swift in Sources */,
 				608E5B3B280AA6FE003C6483 /* NewsItemCell+TestHelpers.swift in Sources */,
 				608E5B39280AA66A003C6483 /* NewsViewControllers+TestHelpers.swift in Sources */,
 				608E5B34280AA558003C6483 /* UIControl+TestHelpers.swift in Sources */,
+				60712F29281024D90092CC82 /* NewsCacheTestHelpers.swift in Sources */,
 				60E78C48280D5A8A006A35FB /* NewsLocalizationTests.swift in Sources */,
 				60712F28281021530092CC82 /* NewsPresenterTests.swift in Sources */,
 				608E5B3D280AA764003C6483 /* NewsUIIntegrationTests+LoaderSpy.swift in Sources */,

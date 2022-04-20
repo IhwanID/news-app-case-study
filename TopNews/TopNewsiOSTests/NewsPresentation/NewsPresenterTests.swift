@@ -7,6 +7,15 @@
 
 import Foundation
 import XCTest
+import TopNews
+
+struct NewsViewModel {
+    let news: [NewsItem]
+}
+
+protocol NewsView {
+    func display(_ viewModel: NewsViewModel)
+}
 
 protocol NewsLoadingView {
     func display(_ viewModel: NewsLoadingViewModel)
@@ -33,17 +42,24 @@ protocol NewsErrorView {
 }
 
 final class NewsPresenter {
+    private let newsView: NewsView
     private let errorView: NewsErrorView
     private let loadingView: NewsLoadingView
     
-    init(loadingView: NewsLoadingView, errorView: NewsErrorView) {
+    init(newsView: NewsView, loadingView: NewsLoadingView, errorView: NewsErrorView) {
         self.errorView = errorView
         self.loadingView = loadingView
+        self.newsView = newsView
     }
     
     func didStartLoadingNews() {
         errorView.display(.noError)
         loadingView.display(NewsLoadingViewModel(isLoading: true))
+    }
+    
+    func didFinishLoadingNews(with news: [NewsItem]) {
+        newsView.display(NewsViewModel(news: news))
+        loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
 }
 
@@ -63,23 +79,34 @@ class NewsPresenterTests: XCTestCase {
         XCTAssertEqual(view.messages, [.display(errorMessage: .none), .display(isLoading: true)])
     }
     
+    func test_didFinishLoadingNews_displaysNewsAndStopsLoading() {
+        let (sut, view) = makeSUT()
+        let news = uniqueNews().models
+        
+        sut.didFinishLoadingNews(with: news)
+        XCTAssertEqual(view.messages, [
+            .display(news: news),
+            .display(isLoading: false)
+        ])
+    }
+    
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: NewsPresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = NewsPresenter(loadingView: view, errorView: view)
+        let sut = NewsPresenter(newsView: view, loadingView: view, errorView: view)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
     }
     
-    private class ViewSpy: NewsErrorView, NewsLoadingView {
-        
-        
-        
+    private class ViewSpy: NewsErrorView, NewsLoadingView, NewsView {
+
         enum Message: Hashable {
             case display(errorMessage: String?)
             case display(isLoading: Bool)
+            case display(news: [NewsItem])
         }
         
         private(set) var messages = Set<Message>()
@@ -91,6 +118,11 @@ class NewsPresenterTests: XCTestCase {
         func display(_ viewModel: NewsLoadingViewModel) {
             messages.insert(.display(isLoading: viewModel.isLoading))
         }
+        
+        func display(_ viewModel: NewsViewModel) {
+            messages.insert(.display(news: viewModel.news))
+        }
     }
     
 }
+

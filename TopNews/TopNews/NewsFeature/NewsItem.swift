@@ -18,4 +18,4 @@ public struct NewsItem {
     public let publishedAt: Date
 }
 
-extension NewsItem: Equatable {}
+extension NewsItem: Hashable {}
