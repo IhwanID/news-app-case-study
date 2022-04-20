@@ -8,52 +8,6 @@
 import XCTest
 import TopNews
 
-struct NewsImageViewModel<Image>  {
-    let author: String?
-    let title: String?
-    let image: Image?
-    let isLoading: Bool
-    let shouldRetry: Bool
-    
-    var hasAuthor: Bool {
-        return author != nil
-    }
-}
-
-protocol NewsImageView {
-    associatedtype Image
-    
-    func display(_ model: NewsImageViewModel<Image>)
-}
-
-final class NewsImagePresenter<View: NewsImageView, Image> where View.Image == Image {
-    private let view: View
-    private let imageTransformer: (Data) -> Image?
-    
-    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
-        self.view = view
-        self.imageTransformer = imageTransformer
-    }
-    
-    func didStartLoadingImageData(for model: NewsItem) {
-        view.display(NewsImageViewModel(author: model.author, title: model.title, image: nil, isLoading: true, shouldRetry: false))
-    }
-    
-    func didFinishLoadingImageData(with data: Data, for model: NewsItem) {
-        let image = imageTransformer(data)
-        view.display(NewsImageViewModel(author: model.author, title: model.title, image: image, isLoading: false, shouldRetry: image == nil))
-    }
-    
-    func didFinishLoadingImageData(with error: Error, for model: NewsItem) {
-        view.display(NewsImageViewModel(
-            author: model.author,
-            title: model.title,
-            image: nil,
-            isLoading: false,
-            shouldRetry: true))
-    }
-}
-
 class NewsImagePresenterTests: XCTestCase {
     
     func test_init_doesNotSendMessagesToView() {
