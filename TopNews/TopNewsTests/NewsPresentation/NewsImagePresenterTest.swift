@@ -26,13 +26,19 @@ protocol NewsImageView {
 
 class NewsImagePresenter {
     private let view: NewsImageView
+    private let imageTransformer: (Data) -> Any?
     
-    init(view: NewsImageView) {
+    init(view: NewsImageView, imageTransformer: @escaping (Data) -> Any?) {
         self.view = view
+        self.imageTransformer = imageTransformer
     }
     
     func didStartLoadingImageData(for model: NewsItem) {
         view.display(NewsImageViewModel(author: model.author, title: model.title, image: nil, isLoading: true, shouldRetry: false))
+    }
+    
+    func didFinishLoadingImageData(with data: Data, for model: NewsItem) {
+        view.display(NewsImageViewModel(author: model.author, title: model.title, image: imageTransformer(data), isLoading: false, shouldRetry: true))
     }
 }
 
@@ -59,11 +65,28 @@ class NewsImagePresenterTests: XCTestCase {
         XCTAssertNil(message?.image)
     }
     
+    func test_didFinishLoadingImageData_displaysRetryOnFailedImageTransformation() {
+        let (sut, view) = makeSUT(imageTransformer: { _ in nil })
+        let news = uniqueItem()
+        let data = Data()
+        
+        sut.didFinishLoadingImageData(with: data, for: news)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.author, news.author)
+        XCTAssertEqual(message?.title, news.title)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.shouldRetry, true)
+        XCTAssertNil(message?.image)
+    }
+    
+    
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: NewsImagePresenter, view: ViewSpy) {
+    private func makeSUT(imageTransformer: @escaping (Data) -> Any? = { _ in nil }, file: StaticString = #file, line: UInt = #line) -> (sut: NewsImagePresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = NewsImagePresenter(view: view)
+        let sut = NewsImagePresenter(view: view, imageTransformer: imageTransformer)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
