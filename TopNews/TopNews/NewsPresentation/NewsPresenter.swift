@@ -15,10 +15,6 @@ public protocol NewsLoadingView {
     func display(_ viewModel: NewsLoadingViewModel)
 }
 
-public struct NewsLoadingViewModel {
-    public let isLoading: Bool
-}
-
 public struct NewsErrorViewModel {
     public let message: String?
     
