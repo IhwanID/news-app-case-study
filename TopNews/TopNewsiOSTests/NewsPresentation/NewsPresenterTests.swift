@@ -46,6 +46,13 @@ final class NewsPresenter {
     private let errorView: NewsErrorView
     private let loadingView: NewsLoadingView
     
+    private var newsLoadError: String {
+        return NSLocalizedString("NEWS_VIEW_CONNECTION_ERROR",
+                                 tableName: "News",
+                                 bundle: Bundle(for: NewsPresenter.self),
+                                 comment: "Error message displayed when we can't load the news from the server")
+    }
+    
     init(newsView: NewsView, loadingView: NewsLoadingView, errorView: NewsErrorView) {
         self.errorView = errorView
         self.loadingView = loadingView
@@ -59,6 +66,11 @@ final class NewsPresenter {
     
     func didFinishLoadingNews(with news: [NewsItem]) {
         newsView.display(NewsViewModel(news: news))
+        loadingView.display(NewsLoadingViewModel(isLoading: false))
+    }
+    
+    func didFinishLoadingNews(with error: Error) {
+        errorView.display(.error(message: newsLoadError))
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
 }
@@ -90,6 +102,17 @@ class NewsPresenterTests: XCTestCase {
         ])
     }
     
+    func test_didFinishLoadingNewsWithError_displaysLocalizedErrorMessageAndStopsLoading() {
+            let (sut, view) = makeSUT()
+
+            sut.didFinishLoadingNews(with: anyNSError())
+
+            XCTAssertEqual(view.messages, [
+                .display(errorMessage: localized("NEWS_VIEW_CONNECTION_ERROR")),
+                .display(isLoading: false)
+            ])
+        }
+    
     
     // MARK: - Helpers
     
@@ -100,6 +123,17 @@ class NewsPresenterTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
     }
+    
+    private func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+            let table = "News"
+            let bundle = Bundle(for: NewsPresenter.self)
+            let value = bundle.localizedString(forKey: key, value: nil, table: table)
+            if value == key {
+                XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+            }
+            return value
+        }
+
     
     private class ViewSpy: NewsErrorView, NewsLoadingView, NewsView {
 
