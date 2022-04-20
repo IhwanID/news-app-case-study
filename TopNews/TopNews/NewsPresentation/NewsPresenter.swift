@@ -7,10 +7,6 @@
 
 import Foundation
 
-public struct NewsViewModel {
-    public let news: [NewsItem]
-}
-
 public protocol NewsView {
     func display(_ viewModel: NewsViewModel)
 }
