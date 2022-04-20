@@ -15,18 +15,6 @@ public protocol NewsLoadingView {
     func display(_ viewModel: NewsLoadingViewModel)
 }
 
-public struct NewsErrorViewModel {
-    public let message: String?
-    
-    static var noError: NewsErrorViewModel {
-        return NewsErrorViewModel(message: nil)
-    }
-    
-    static func error(message: String) -> NewsErrorViewModel {
-        return NewsErrorViewModel(message: message)
-    }
-}
-
 public protocol NewsErrorView {
     func display(_ viewModel: NewsErrorViewModel)
 }
