@@ -7,7 +7,7 @@
 
 import Foundation
 import XCTest
-@testable import TopNewsiOS
+@testable import TopNews
 
 final class NewsLocalizationTests: XCTestCase {
 

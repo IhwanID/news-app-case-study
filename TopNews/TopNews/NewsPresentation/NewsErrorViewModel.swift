@@ -1,14 +1,14 @@
 //
 //  NewsErrorViewModel.swift
-//  TopNewsiOS
+//  TopNews
 //
-//  Created by Ihwan on 19/04/22.
+//  Created by Ihwan on 20/04/22.
 //
 
 import Foundation
 
-struct NewsErrorViewModel {
-    let message: String?
+public struct NewsErrorViewModel {
+    public let message: String?
     
     static var noError: NewsErrorViewModel {
         return NewsErrorViewModel(message: nil)

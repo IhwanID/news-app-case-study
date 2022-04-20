@@ -1,9 +1,0 @@
-/* 
-  News.strings
-  TopNews
-
-  Created by Ihwan on 18/04/22.
-  
-*/
-"NEWS_VIEW_TITLE" = "meine Neuigkeiten";
-"NEWS_VIEW_CONNECTION_ERROR" = "Es konnte keine Verbindung zum Server hergestellt werden";

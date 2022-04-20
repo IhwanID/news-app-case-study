@@ -1,37 +1,30 @@
 //
 //  NewsPresenter.swift
-//  TopNewsiOS
+//  TopNews
 //
-//  Created by Ihwan on 16/04/22.
+//  Created by Ihwan on 20/04/22.
 //
 
 import Foundation
-import TopNews
 
-protocol NewsErrorView {
-    func display(_ viewModel: NewsErrorViewModel)
-}
-
-protocol NewsLoadingView {
-    func display(_ viewModel: NewsLoadingViewModel)
-}
-
-protocol NewsView {
+public protocol NewsView {
     func display(_ viewModel: NewsViewModel)
 }
 
-final class NewsPresenter {
+public protocol NewsLoadingView {
+    func display(_ viewModel: NewsLoadingViewModel)
+}
+
+public protocol NewsErrorView {
+    func display(_ viewModel: NewsErrorViewModel)
+}
+
+public final class NewsPresenter {
     private let newsView: NewsView
-    private let loadingView: NewsLoadingView
     private let errorView: NewsErrorView
+    private let loadingView: NewsLoadingView
     
-    init(newsView: NewsView, loadingView: NewsLoadingView, errorView: NewsErrorView){
-        self.newsView = newsView
-        self.loadingView = loadingView
-        self.errorView = errorView
-    }
-    
-    static var title: String {
+    public static var title: String {
         return NSLocalizedString("NEWS_VIEW_TITLE",
                                  tableName: "News",
                                  bundle: Bundle(for: NewsPresenter.self),
@@ -45,17 +38,23 @@ final class NewsPresenter {
                                  comment: "Error message displayed when we can't load the news from the server")
     }
     
-    func didStartLoadingNews() {
+    public init(newsView: NewsView, loadingView: NewsLoadingView, errorView: NewsErrorView) {
+        self.errorView = errorView
+        self.loadingView = loadingView
+        self.newsView = newsView
+    }
+    
+    public func didStartLoadingNews() {
         errorView.display(.noError)
         loadingView.display(NewsLoadingViewModel(isLoading: true))
     }
     
-    func didFinishLoadingNews(with news: [NewsItem]) {
+    public func didFinishLoadingNews(with news: [NewsItem]) {
         newsView.display(NewsViewModel(news: news))
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
     
-    func didFinishLoadingNews(with error: Error) {
+    public func didFinishLoadingNews(with error: Error) {
         errorView.display(.error(message: newsLoadError))
         loadingView.display(NewsLoadingViewModel(isLoading: false))
     }
