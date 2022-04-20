@@ -43,6 +43,15 @@ final class NewsImagePresenter<View: NewsImageView, Image> where View.Image == I
         let image = imageTransformer(data)
         view.display(NewsImageViewModel(author: model.author, title: model.title, image: image, isLoading: false, shouldRetry: image == nil))
     }
+    
+    func didFinishLoadingImageData(with error: Error, for model: NewsItem) {
+        view.display(NewsImageViewModel(
+            author: model.author,
+            title: model.title,
+            image: nil,
+            isLoading: false,
+            shouldRetry: true))
+    }
 }
 
 class NewsImagePresenterTests: XCTestCase {
@@ -99,6 +108,21 @@ class NewsImagePresenterTests: XCTestCase {
         XCTAssertEqual(message?.isLoading, false)
         XCTAssertEqual(message?.shouldRetry, false)
         XCTAssertEqual(message?.image, transformedData)
+    }
+    
+    func test_didFinishLoadingImageDataWithError_displaysRetry() {
+        let image = uniqueItem()
+        let (sut, view) = makeSUT()
+        
+        sut.didFinishLoadingImageData(with: anyNSError(), for: image)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.author, image.author)
+        XCTAssertEqual(message?.title, image.title)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.shouldRetry, true)
+        XCTAssertNil(message?.image)
     }
     
     // MARK: - Helpers
